@@ -5,10 +5,17 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import org.jetbrains.annotations.NotNull;
+import com.project.healthcare.data.BaseData;
+
 
 public class HomeViewModel extends AndroidViewModel {
-    public HomeViewModel(@NonNull @NotNull Application application) {
+    private final BaseData baseData;
+    public HomeViewModel(@NonNull Application application) {
         super(application);
+        baseData = new BaseData();
+    }
+
+    public BaseData getBaseData() {
+        return baseData;
     }
 }

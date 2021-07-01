@@ -3,7 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data/>
+    <data>
+        <variable
+            name="data"
+            type="com.project.healthcare.data.BaseData" />
+    </data>
 
 <androidx.drawerlayout.widget.DrawerLayout
 
@@ -47,25 +51,34 @@
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/titleBarCard"
+            style="@style/CustomCardViewStyle"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            app:cardElevation="4dp"
-            android:layout_marginEnd="8dp"
-            style="@style/CustomCardViewStyle"
             app:cardBackgroundColor="@color/blue"
+            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/title_bar_txt_size"
-                android:text="Home" />
+                android:layout_gravity="center"
+                android:text="@{data.titleBarName}"
+                android:textSize="@dimen/title_bar_txt_size" />
         </com.google.android.material.card.MaterialCardView>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:name="com.project.healthcare.ui.home.fragments.HomeFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleBarCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -90,21 +103,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageButton
+                    android:id="@+id/btnNavMenuClose"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/ic_menu" />
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/linearLayoutCompat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_gravity="end"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="4dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/btnNavMenuClose"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <include
-                        android:id="@+id/card_1"
-                        layout="@layout/nav_menu_card" />
+                        android:id="@+id/navMenuLogin"
+                        layout="@layout/nav_menu_card_login" />
+
+                    <include
+                        android:id="@+id/navMenuLogout"
+                        layout="@layout/nav_menu_card_logout"
+                        android:visibility="gone" />
+
+                    <include
+                        android:id="@+id/navMenuProfile"
+                        layout="@layout/nav_menu_card_profile" />
+
+                    <include
+                        android:id="@+id/navMenuHome"
+                        layout="@layout/nav_menu_card_home" />
+
+                    <include
+                        android:id="@+id/navMenuSearch"
+                        layout="@layout/nav_menu_card_search" />
+
+                    <include
+                        android:id="@+id/navMenuCovid"
+                        layout="@layout/nav_menu_card_covid" />
 
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
