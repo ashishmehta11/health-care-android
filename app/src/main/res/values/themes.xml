@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Healthcare" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
@@ -13,7 +13,6 @@
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
 
-
     <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">0dp</item>
@@ -21,6 +20,22 @@
         <item name="cornerSizeBottomRight">@dimen/card_corner_radius</item>
         <item name="cornerSizeBottomLeft">@dimen/card_corner_radius</item>
     </style>
+
+
+    <style name="CustomCardViewStyleNewsFlash" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_corners_news_flash
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners_news_flash" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">12dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
 
     <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
 

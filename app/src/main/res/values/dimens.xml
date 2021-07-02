@@ -6,4 +6,5 @@
     <dimen name="nav_menu_item_txt_size">12sp</dimen>
     <dimen name="nav_menu_icon_size">28dp</dimen>
     <dimen name="nav_menu_card_size">72dp</dimen>
+    <dimen name="facility_list_item_height">130dp</dimen>
 </resources>

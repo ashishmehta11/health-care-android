@@ -72,7 +72,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainer"
-            android:name="com.project.healthcare.ui.home.fragments.HomeFragment"
+            android:name="com.project.healthcare.ui.home.HomeFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

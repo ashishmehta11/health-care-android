@@ -1,4 +1,4 @@
-package com.project.healthcare.ui.home.fragments.center_fragment;
+package com.project.healthcare.ui.home.center_fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
 import com.project.healthcare.databinding.FragmentHomeCenterBinding;
-import com.project.healthcare.ui.home.HomeViewModel;
+import com.project.healthcare.ui.MainActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Observer;
 
 public class HomeCenterFragment extends Fragment implements Observer {
     FragmentHomeCenterBinding binding;
-    HomeViewModel viewModel;
+    MainActivityViewModel viewModel;
     RecyclerCitiesAdapter recyclerCitiesAdapter;
     RecyclerFacilityListAdapter recyclerFacilityListAdapter;
     ArrayAdapter<CharSequence> statesAdapter;
@@ -34,7 +34,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_center, container, false);
         }

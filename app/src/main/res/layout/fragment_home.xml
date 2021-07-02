@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.fragments.HomeFragment"
+    tools:context=".ui.home.HomeFragment"
     android:orientation="vertical"
     android:background="@color/white">
 
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentCenter"
-        android:name="com.project.healthcare.ui.home.fragments.center_fragment.HomeCenterFragment"
+        android:name="com.project.healthcare.ui.home.center_fragment.HomeCenterFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -21,7 +21,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentBottom"
-            android:name="com.project.healthcare.ui.home.fragments.bottom_fragment.HomeBottomFragment"
+            android:name="com.project.healthcare.ui.home.bottom_fragment.HomeBottomFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom" />

@@ -1,4 +1,4 @@
-package com.project.healthcare.ui.home;
+package com.project.healthcare.ui;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,24 +12,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
-import com.project.healthcare.databinding.ActivityHomeBinding;
-import com.project.healthcare.ui.home.fragments.HomeFragment;
+import com.project.healthcare.databinding.ActivityMainBinding;
+import com.project.healthcare.ui.home.HomeFragment;
 
 
-public class Home extends AppCompatActivity {
-    private ActivityHomeBinding binding;
-    private HomeViewModel viewModel;
+public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
+    private MainActivityViewModel viewModel;
     private static final String TAG = "HomeActivity";
     private FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
+        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setData(viewModel.getBaseData());
         binding.drawerLayout.setDrawerElevation(0);
         binding.drawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent, getTheme()));
-        fragmentManager= getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         attachListeners();
         attachFragment(HomeFragment.class);
     }

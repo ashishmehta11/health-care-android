@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        tools:context=".ui.home.fragments.center_fragment.HomeCenterFragment">
+        tools:context=".ui.home.center_fragment.HomeCenterFragment">
 
 
         <Spinner

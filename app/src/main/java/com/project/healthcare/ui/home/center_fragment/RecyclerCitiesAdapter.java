@@ -1,4 +1,4 @@
-package com.project.healthcare.ui.home.fragments.center_fragment;
+package com.project.healthcare.ui.home.center_fragment;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.healthcare.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
