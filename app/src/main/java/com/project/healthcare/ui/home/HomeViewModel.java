@@ -67,6 +67,7 @@ public class HomeViewModel extends AndroidViewModel {
                         add("Thane");
                         add("Pune");
                         add("Lonawala");
+                        add("Lonawala");
                     }
                 });
 
@@ -75,6 +76,7 @@ public class HomeViewModel extends AndroidViewModel {
                     {
                         add("Jaipur");
                         add("Udaipur");
+                        add("Bikaner");
                     }
                 });
 

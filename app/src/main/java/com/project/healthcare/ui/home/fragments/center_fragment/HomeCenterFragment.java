@@ -1,18 +1,16 @@
 package com.project.healthcare.ui.home.fragments.center_fragment;
 
 import android.os.Bundle;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
 import com.project.healthcare.databinding.FragmentHomeCenterBinding;
@@ -29,6 +27,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
     FragmentHomeCenterBinding binding;
     HomeViewModel viewModel;
     RecyclerCitiesAdapter recyclerCitiesAdapter;
+    RecyclerFacilityListAdapter recyclerFacilityListAdapter;
     ArrayAdapter<CharSequence> statesAdapter;
     private static final String TAG = "HomeCenterFragment";
     @Override
@@ -36,24 +35,30 @@ public class HomeCenterFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        if(binding==null) {
+        if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_center, container, false);
         }
         prepareSpinner();
-        prepareRecycler(viewModel.getStatesAndCities().get(viewModel.getSelectedCity().getValue()));
+        prepareRecyclerCities(viewModel.getStatesAndCities().get(viewModel.getSelectedCity().getValue()));
+        prepareRecyclerFacilityList();
         attachObservers();
         return binding.getRoot();
+    }
+
+    private void prepareRecyclerFacilityList() {
+        recyclerFacilityListAdapter = new RecyclerFacilityListAdapter();
+        binding.recyclerFacilityList.setAdapter(recyclerFacilityListAdapter);
     }
 
     private void attachObservers() {
         viewModel.getSelectedState().observe(getViewLifecycleOwner(), s -> {
             viewModel.reSetSelectedCity();
-            prepareRecycler(viewModel.getStatesAndCities().get(s));
+            prepareRecyclerCities(viewModel.getStatesAndCities().get(s));
         });
     }
 
-    private void prepareRecycler(List<String> list) {
-        recyclerCitiesAdapter = new RecyclerCitiesAdapter(list,viewModel.getSelectedCity().getValue());
+    private void prepareRecyclerCities(List<String> list) {
+        recyclerCitiesAdapter = new RecyclerCitiesAdapter(list, viewModel.getSelectedCity().getValue());
         binding.recyclerCities.setAdapter(recyclerCitiesAdapter);
     }
 
