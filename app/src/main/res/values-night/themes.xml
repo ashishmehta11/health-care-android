@@ -21,4 +21,12 @@
         <item name="cornerSizeBottomRight">@dimen/card_corner_radius</item>
         <item name="cornerSizeBottomLeft">@dimen/card_corner_radius</item>
     </style>
+
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="elevation">0dp</item>
+    </style>
 </resources>
