@@ -2,30 +2,207 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="150dp"
-        android:layout_height="150dp">
+    <data>
 
+        <variable
+            name="data"
+            type="com.project.healthcare.data.HomeCovidNewsFlash" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="165dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:background="@android:color/transparent">
+
+
+        <TextView
+            android:id="@+id/txtCases"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@{data.cases}"
+            android:textColor="@color/blue"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/lblCases"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lblCases"
+            app:layout_constraintTop_toTopOf="@+id/lblCases" />
+
+        <TextView
+            android:id="@+id/txtDeaths"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@{data.deaths}"
+            android:textColor="@color/blue"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/lblDeaths"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lblDeaths"
+            app:layout_constraintTop_toTopOf="@+id/lblDeaths" />
+
+        <TextView
+            android:id="@+id/txtRecovery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@{data.recovery}"
+            android:textColor="@color/blue"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/lblRecovery"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lblRecovery"
+            app:layout_constraintTop_toTopOf="@+id/lblRecovery" />
+
+        <TextView
+            android:id="@+id/txtVaccines"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@{data.vaccinated}"
+            android:textColor="@color/blue"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/lblVaccine"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lblVaccine"
+            app:layout_constraintTop_toTopOf="@+id/lblVaccine" />
+
+        <TextView
+            android:id="@+id/lblCases"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="Cases"
+            android:textColor="@color/dark_grey"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/lblDeaths"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="Deaths "
+            android:textColor="@color/dark_grey"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblCases" />
+
+        <TextView
+            android:id="@+id/lblRecovery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="Recovery "
+            android:textColor="@color/dark_grey"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblDeaths" />
+
+        <TextView
+            android:id="@+id/lblVaccine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="Vaccinated: "
+            android:textColor="@color/dark_grey"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblRecovery" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/yellow"
+            android:elevation="2.1dp"
+            app:layout_constraintEnd_toEndOf="@+id/txtState"
+            app:layout_constraintStart_toStartOf="@+id/txtState"
+            app:layout_constraintTop_toBottomOf="@+id/txtState" />
+
+        <TextView
+            android:id="@+id/txtState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:elevation="2.1dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@{data.area}"
+            android:textColor="@color/blue"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
             app:cardBackgroundColor="@color/light_yellow"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cardView3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.cardview.widget.CardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView3"
             style="@style/CustomCardViewStyleNewsFlash"
-            android:layout_width="6dp"
+            android:layout_width="4dp"
             android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             app:cardBackgroundColor="@color/yellow"
             app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
