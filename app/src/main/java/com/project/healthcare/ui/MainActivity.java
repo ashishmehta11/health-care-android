@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //PROFILE
+
         binding.navMenuProfile.cardView.setOnClickListener(v -> {
             setBlueNavMenuCards();
             binding.navMenuProfile.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));

@@ -6,9 +6,7 @@ plugins {
 android {
     compileSdkVersion 30
 
-    dataBinding {
-        enabled = true
-    }
+
 
     defaultConfig {
         applicationId "com.project.healthcare"
@@ -32,6 +30,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 
 }
