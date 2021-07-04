@@ -1,5 +1,6 @@
 package com.project.healthcare.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.project.healthcare.R;
 import com.project.healthcare.databinding.ActivityMainBinding;
 import com.project.healthcare.ui.home.HomeFragment;
+import com.project.healthcare.ui.login.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -95,36 +97,43 @@ public class MainActivity extends AppCompatActivity {
         binding.navMenuHome.cardView.setOnClickListener(v -> {
             setBlueNavMenuCards();
             binding.navMenuHome.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //LOGIN
         binding.navMenuLogin.cardView.setOnClickListener(v -> {
             setBlueNavMenuCards();
             binding.navMenuLogin.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+            startActivity(new Intent(this, LoginActivity.class));
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //PROFILE
         binding.navMenuProfile.cardView.setOnClickListener(v -> {
             setBlueNavMenuCards();
             binding.navMenuProfile.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //SEARCH
         binding.navMenuSearch.cardView.setOnClickListener(v -> {
             setBlueNavMenuCards();
             binding.navMenuSearch.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //COVID
         binding.navMenuCovid.cardView.setOnClickListener(v -> {
             setBlueNavMenuCards();
             binding.navMenuCovid.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
+        setBlueNavMenuCards();
+        binding.navMenuHome.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
     }
 }
