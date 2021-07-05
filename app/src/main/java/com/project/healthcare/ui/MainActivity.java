@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.project.healthcare.R;
 import com.project.healthcare.databinding.ActivityMainBinding;
-import com.project.healthcare.ui.home.HomeFragment;
 import com.project.healthcare.ui.login.LoginActivity;
 
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private MainActivityViewModel viewModel;
     private static final String TAG = "HomeActivity";
-    private FragmentManager fragmentManager;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,27 +33,30 @@ public class MainActivity extends AppCompatActivity {
         binding.setData(viewModel.getBaseData());
         binding.drawerLayout.setDrawerElevation(0);
         binding.drawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent, getTheme()));
-        fragmentManager = getSupportFragmentManager();
+        navController = Navigation.findNavController(this, R.id.navHostFragment);
+        NavigationUI.setupWithNavController(binding.navView, navController);
         attachListeners();
-        attachFragment(HomeFragment.class);
+        if (getIntent().hasExtra("register")) {
+            //navController.popBackStack();
+            navController.navigate(R.id.register);
+        }
+        //else
+        // attachFragment(HomeFragment.class);
     }
 
-    private void attachFragment(Class fc) {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fc, null)
-                .setReorderingAllowed(true)
-                .commitNow();
-        setBlueNavMenuCards();
-        if (fc == HomeFragment.class)
-            binding.navMenuHome.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
-    }
 
-    private void setBlueNavMenuCards() {
-        binding.navMenuHome.cardView.setCardBackgroundColor(getColor(R.color.blue));
-        binding.navMenuLogin.cardView.setCardBackgroundColor(getColor(R.color.blue));
-        binding.navMenuCovid.cardView.setCardBackgroundColor(getColor(R.color.blue));
-        binding.navMenuProfile.cardView.setCardBackgroundColor(getColor(R.color.blue));
-        binding.navMenuSearch.cardView.setCardBackgroundColor(getColor(R.color.blue));
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (viewModel.getBaseData().getTitleBarName().contains("Registration")) {
+            //navController.navigate(R.id.homeFragment);
+            navController.popBackStack(R.id.homeFragment, true);
+        }
+
+        if (viewModel.getBaseData().getTitleBarName().contains("Home")) {
+            //navController.navigate(R.id.homeFragment);
+            finish();
+        }
     }
 
     private void attachListeners() {
@@ -68,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDrawerClosed(@NonNull  View drawerView) {
+            public void onDrawerClosed(@NonNull View drawerView) {
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                if(binding.drawerLayout.isDrawerOpen(GravityCompat.END))
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END))
                     binding.cardMenu.setVisibility(View.GONE);
                 else
                     binding.cardMenu.setVisibility(View.VISIBLE);
@@ -95,38 +99,35 @@ public class MainActivity extends AppCompatActivity {
     private void attachNavMenuClickListener() {
         // HOME
         binding.navMenuHome.cardView.setOnClickListener(v -> {
-            setBlueNavMenuCards();
-            binding.navMenuHome.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
-            binding.drawerLayout.closeDrawer(GravityCompat.END);
+            //navController.popBackStack();
+//           navController.navigate(R.id.homeFragment,true);
+            navController.popBackStack(R.id.homeFragment, false);
         });
 
         //LOGIN
         binding.navMenuLogin.cardView.setOnClickListener(v -> {
-            setBlueNavMenuCards();
-            binding.navMenuLogin.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+
             startActivity(new Intent(this, LoginActivity.class));
+
             binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //PROFILE
 
         binding.navMenuProfile.cardView.setOnClickListener(v -> {
-            setBlueNavMenuCards();
-            binding.navMenuProfile.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+
             binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //SEARCH
         binding.navMenuSearch.cardView.setOnClickListener(v -> {
-            setBlueNavMenuCards();
-            binding.navMenuSearch.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+
             binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //COVID
         binding.navMenuCovid.cardView.setOnClickListener(v -> {
-            setBlueNavMenuCards();
-            binding.navMenuCovid.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+
             binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
     }
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        setBlueNavMenuCards();
-        binding.navMenuHome.cardView.setCardBackgroundColor(getColor(R.color.transparent_white));
+        viewModel.getBaseData().setTitleBarName("Home");
     }
 }

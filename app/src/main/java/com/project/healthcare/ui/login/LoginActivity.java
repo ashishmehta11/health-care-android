@@ -1,5 +1,6 @@
 package com.project.healthcare.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,13 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
 import com.project.healthcare.databinding.ActivityLoginBinding;
+import com.project.healthcare.ui.MainActivity;
 
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
     LoginActivityViewModel viewModel;
     ActivityLoginBinding binding;
-    boolean isEmailCorrect = false, isPassCorrect = false;
+    boolean isEmailCorrect = false, isPassCorrect = false, isPhone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +32,32 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attachListeners() {
         //LOGIN BTN CLICK LISTENER
-        binding.cardLogin.setOnClickListener(v -> {
-            attemptLogin();
-        });
+        binding.cardLogin.setOnClickListener(v -> attemptLogin());
 
         //REGISTER CLICK LISTENER
-        binding.txtRegister.setOnClickListener(v -> {
-        });
+        binding.txtRegister.setOnClickListener(v -> navigateToRegister());
 
         //FORGOT PASS CLICK LISTENER
         binding.txtForgotPassword.setOnClickListener(v -> {
+            if (!isPhone && isEmailCorrect) {
+                navigateToForgotPassword();
+            }
         });
 
         addTextWatchers();
     }
+
+    private void navigateToRegister() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("register", true);
+        startActivity(i);
+        super.finishAndRemoveTask();
+
+    }
+
+    private void navigateToForgotPassword() {
+    }
+
 
     private void attemptLogin() {
         if (isEmailCorrect && isPassCorrect) {
@@ -71,7 +85,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (!Pattern.matches(emailRegex, s.toString())
                             && !Pattern.matches(numberRegex, s.toString())) {
                         setEmailIncorrect();
+                        isPhone = false;
                     } else {
+                        isPhone = !Pattern.matches(emailRegex, s.toString());
                         setEmailCorrect();
                     }
                 } else {

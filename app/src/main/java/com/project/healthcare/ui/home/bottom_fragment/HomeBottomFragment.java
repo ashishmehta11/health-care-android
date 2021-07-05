@@ -1,6 +1,5 @@
 package com.project.healthcare.ui.home.bottom_fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -30,6 +29,8 @@ public class HomeBottomFragment extends Fragment {
     private FragmentHomeBottomBinding binding;
     private MainActivityViewModel viewModel;
     private RecyclerCasesAdapter casesAdapter;
+    final Handler handler = new Handler();
+    private Runnable runnable;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -40,9 +41,17 @@ public class HomeBottomFragment extends Fragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_bottom, container, false);
         }
         prepareList();
-        prepareRecyclerCases(requireContext());
+        setLayoutManager();
+        prepareRecyclerCases();
         attachListeners();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setLayoutManager();
+        autoScroll();
     }
 
     private void prepareList() {
@@ -64,11 +73,13 @@ public class HomeBottomFragment extends Fragment {
     private void navigateToCovidScreen() {
     }
 
-    private void prepareRecyclerCases(Context context) {
-        layoutManagerCases = new LinearLayoutManager(context) {
+    private void setLayoutManager() {
+        layoutManagerCases = new LinearLayoutManager(viewModel.getApplication().getApplicationContext()) {
             @Override
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-                LinearSmoothScroller smoothScroller = new LinearSmoothScroller(requireContext()) {
+                if (viewModel.getApplication().getApplicationContext() == null)
+                    return;
+                LinearSmoothScroller smoothScroller = new LinearSmoothScroller(viewModel.getApplication().getApplicationContext()) {
                     private static final float SPEED = 1f;// Change this value (default=25f)
 
                     @Override
@@ -78,10 +89,14 @@ public class HomeBottomFragment extends Fragment {
                 };
                 smoothScroller.setTargetPosition(position);
                 startSmoothScroll(smoothScroller);
-            }
 
+            }
         };
         layoutManagerCases.setOrientation(RecyclerView.HORIZONTAL);
+    }
+
+
+    private void prepareRecyclerCases() {
         casesAdapter = new RecyclerCasesAdapter(list);
         binding.recyclerCases.setLayoutManager(layoutManagerCases);
         binding.recyclerCases.setAdapter(casesAdapter);
@@ -93,7 +108,7 @@ public class HomeBottomFragment extends Fragment {
     public void autoScroll() {
         final int speedScroll = 0;
         final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
+        runnable = new Runnable() {
             int count = 0;
 
             @Override
@@ -109,5 +124,9 @@ public class HomeBottomFragment extends Fragment {
         handler.postDelayed(runnable, speedScroll);
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+    }
 }

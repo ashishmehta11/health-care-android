@@ -3,9 +3,11 @@ package com.project.healthcare.ui;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.project.healthcare.R;
 import com.project.healthcare.data.BaseData;
 
 import java.util.ArrayList;
@@ -18,13 +20,21 @@ public class MainActivityViewModel extends AndroidViewModel {
     private LinkedHashMap<String, ArrayList<String>> statesAndCities = new LinkedHashMap<>();
     private MutableLiveData<String> selectedState;
     private MutableLiveData<String> selectedCity;
+    private Application application;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-        baseData = new BaseData();
+        this.application = application;
+        //new Color.)
+        baseData = new BaseData(AppCompatResources.getColorStateList(application.getApplicationContext(), R.color.blue)
+                , AppCompatResources.getColorStateList(application.getApplicationContext(), R.color.transparent_white));
         buildStatesAndCities();
         selectedState = new MutableLiveData<>("Gujarat");
         selectedCity = new MutableLiveData<>(statesAndCities.get(selectedState.getValue()).get(0));
+    }
+
+    public Application getApplication() {
+        return application;
     }
 
     public void reSetSelectedCity() {

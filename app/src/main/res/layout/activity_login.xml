@@ -95,7 +95,7 @@
                         android:layout_marginTop="16dp"
                         android:gravity="end"
                         android:text="Forgot Password?"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/light_blue"
                         android:textSize="17sp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
@@ -70,11 +71,13 @@
                 android:textSize="@dimen/title_bar_txt_size" />
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainer"
-            android:name="com.project.healthcare.ui.home.HomeFragment"
+        <fragment
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +87,7 @@
 
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
         android:layout_width="126dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
@@ -130,7 +134,8 @@
 
                     <include
                         android:id="@+id/navMenuLogin"
-                        layout="@layout/nav_menu_card_login" />
+                        layout="@layout/nav_menu_card_login"
+                        bind:data="@{data}" />
 
                     <include
                         android:id="@+id/navMenuLogout"
@@ -139,19 +144,23 @@
 
                     <include
                         android:id="@+id/navMenuProfile"
-                        layout="@layout/nav_menu_card_profile" />
+                        layout="@layout/nav_menu_card_profile"
+                        bind:data="@{data}" />
 
                     <include
                         android:id="@+id/navMenuHome"
-                        layout="@layout/nav_menu_card_home" />
+                        layout="@layout/nav_menu_card_home"
+                        bind:data="@{data}" />
 
                     <include
                         android:id="@+id/navMenuSearch"
-                        layout="@layout/nav_menu_card_search" />
+                        layout="@layout/nav_menu_card_search"
+                        bind:data="@{data}" />
 
                     <include
                         android:id="@+id/navMenuCovid"
-                        layout="@layout/nav_menu_card_covid" />
+                        layout="@layout/nav_menu_card_covid"
+                        bind:data="@{data}" />
 
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
