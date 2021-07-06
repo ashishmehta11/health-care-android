@@ -1,5 +1,7 @@
 package com.project.healthcare.ui.login;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,7 +14,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
+import com.project.healthcare.data.DialogData;
 import com.project.healthcare.databinding.ActivityLoginBinding;
+import com.project.healthcare.databinding.DialogRegistrationChoiceBinding;
 import com.project.healthcare.ui.MainActivity;
 
 import java.util.regex.Pattern;
@@ -35,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.cardLogin.setOnClickListener(v -> attemptLogin());
 
         //REGISTER CLICK LISTENER
-        binding.txtRegister.setOnClickListener(v -> navigateToRegister());
+        binding.txtRegister.setOnClickListener(v -> showDialog());
 
         //FORGOT PASS CLICK LISTENER
         binding.txtForgotPassword.setOnClickListener(v -> {
@@ -47,9 +51,31 @@ public class LoginActivity extends AppCompatActivity {
         addTextWatchers();
     }
 
-    private void navigateToRegister() {
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_Dialog_Alert);
+        DialogData dialogData = new DialogData("Registration", "OK");
+        DialogRegistrationChoiceBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_registration_choice, null, false);
+        binding.setData(dialogData);
+        builder.setView(binding.getRoot());
+        Dialog dialog = builder.create();
+
+        binding.radioGroup.check(R.id.radioButtonGeneral);
+        binding.header.btnCloseDialog.setOnClickListener(v -> {
+            if (dialog.isShowing())
+                dialog.cancel();
+        });
+        binding.footer.dialogBtnFooter.setOnClickListener(v -> {
+            if (binding.radioButtonFacility.isChecked()) navigateToRegister("facility");
+            else navigateToRegister("citizen");
+        });
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.show();
+        // dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void navigateToRegister(String msg) {
         Intent i = new Intent(this, MainActivity.class);
-        i.putExtra("register", true);
+        i.putExtra(msg, true);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Healthcare" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
@@ -6,13 +6,29 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:statusBarColor">@color/blue</item>
         <item name="colorPrimary">@color/white</item>
-
         <!-- Customize your theme here. -->
     </style>
+    <!-- Material edit text-->
+    <style name="TextInputLayoutTheme" parent="Widget.Design.TextInputLayout">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/blue</item>
+        <!--        <item name="android:textSize">@dimen/medium_text_size</item>-->
+        <item name="colorAccent">@color/white</item>
+        <item name="backgroundColor">@color/blue</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorControlNormal">@color/blue</item>
+        <item name="colorControlActivated">@color/light_blue</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!--    material edit tex end-->
     <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
-
 
     <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
         <item name="cornerFamily">rounded</item>
@@ -22,11 +38,87 @@
         <item name="cornerSizeBottomLeft">@dimen/card_corner_radius</item>
     </style>
 
+
+    <style name="CustomCardViewStyleNewsFlash" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_corners_news_flash
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners_news_flash" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">12dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+
+    <style name="CustomCardDialogHeader" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_corners_dialog_header
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners_dialog_header" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+
+    <style name="CustomCardDialogFooter" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_corners_dialog_footer
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners_dialog_footer" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">12dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+    </style>
+
+    <style name="CustomCardDialogBody" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_corners_dialog_body
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners_dialog_body" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+    </style>
+
+
     <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
 
     </style>
 
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-        <item name="elevation">0dp</item>
+
     </style>
+
+    <style name="Theme.Healthcare.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Healthcare.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Healthcare.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.Dialog.Alert" parent="@style/Theme.AppCompat.Dialog.Alert">
+        <!--        <item name="android:backgroundDimEnabled">true</item>-->
+        <!--        <item name="android:backgroundDimAmount">0.75</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

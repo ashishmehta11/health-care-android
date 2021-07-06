@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupWithNavController(binding.navView, navController);
         attachListeners();
-        if (getIntent().hasExtra("register")) {
+        if (getIntent().hasExtra("citizen")) {
             //navController.popBackStack();
-            navController.navigate(R.id.register);
+            navController.navigate(R.id.register_citizen);
         }
         //else
         // attachFragment(HomeFragment.class);
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
-            case R.id.register:
+            case R.id.register_citizen:
                 navController.popBackStack(R.id.homeFragment, true);
                 return;
             case R.id.homeFragment:

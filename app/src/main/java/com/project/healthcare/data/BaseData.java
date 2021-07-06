@@ -11,7 +11,13 @@ import com.project.healthcare.BR;
 public class BaseData extends BaseObservable {
     private static final String TAG = "BaseData";
     private String titleBarName = "Home";
-    private ColorStateList blue, transparentWhite, home, login, search, covid, profile;
+    private final ColorStateList blue;
+    private final ColorStateList transparentWhite;
+    private ColorStateList home;
+    private ColorStateList login;
+    private ColorStateList search;
+    private ColorStateList covid;
+    private ColorStateList profile;
 
     public BaseData(ColorStateList blue, ColorStateList transparentWhite) {
         this.blue = blue;
@@ -36,10 +42,9 @@ public class BaseData extends BaseObservable {
         this.titleBarName = titleBarName;
         Log.d(TAG, "setTitleBarName: " + this.titleBarName);
         notifyPropertyChanged(BR.titleBarName);
-        if (titleBarName.contains("Registration")) {
+        if (titleBarName.contains("Citizen") || titleBarName.contains("Healthcare Facility")) {
             setBlue();
             setLogin(transparentWhite);
-            Log.d(TAG, "setTitleBarName: in if");
         }
         if (titleBarName.contains("Home")) {
             setBlue();

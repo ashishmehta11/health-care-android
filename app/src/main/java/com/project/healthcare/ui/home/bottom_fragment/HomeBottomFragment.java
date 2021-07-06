@@ -21,6 +21,7 @@ import com.project.healthcare.databinding.FragmentHomeBottomBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HomeBottomFragment extends Fragment {
 
@@ -55,13 +56,13 @@ public class HomeBottomFragment extends Fragment {
     }
 
     private void prepareList() {
-        for (int i = 0; i < 30; i++) {
-            list.add(new HomeCovidNewsFlash(
-                    String.valueOf(i),
-                    String.valueOf(i),
-                    String.valueOf(i),
-                    String.valueOf(i),
-                    "Madhya Pradesh"));
+        int i = 0;
+        for (Map.Entry<String, ArrayList<String>> entry : viewModel.getStatesAndCities().entrySet()) {
+            list.add(new HomeCovidNewsFlash(String.valueOf(++i),
+                    String.valueOf(++i),
+                    String.valueOf(++i),
+                    String.valueOf(++i),
+                    entry.getKey()));
         }
     }
 
@@ -97,6 +98,7 @@ public class HomeBottomFragment extends Fragment {
 
 
     private void prepareRecyclerCases() {
+
         casesAdapter = new RecyclerCasesAdapter(list);
         binding.recyclerCases.setLayoutManager(layoutManagerCases);
         binding.recyclerCases.setAdapter(casesAdapter);

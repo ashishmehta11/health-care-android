@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.project.healthcare.R;
 import com.project.healthcare.data.BaseData;
+import com.project.healthcare.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +18,10 @@ import java.util.LinkedHashMap;
 
 public class MainActivityViewModel extends AndroidViewModel {
     private final BaseData baseData;
-    private LinkedHashMap<String, ArrayList<String>> statesAndCities = new LinkedHashMap<>();
-    private MutableLiveData<String> selectedState;
-    private MutableLiveData<String> selectedCity;
-    private Application application;
+    public static LinkedHashMap<String, ArrayList<String>> statesAndCities = new LinkedHashMap<>();
+    private final MutableLiveData<String> selectedState;
+    private final MutableLiveData<String> selectedCity;
+    private final Application application;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -59,146 +60,147 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private void buildStatesAndCities() {
-        statesAndCities.putIfAbsent("Gujarat",
-                new ArrayList<String>() {
-                    {
-                        add("Ahmedabad");
-                        add("Gandhinagar");
-                        add("Rajakot");
-                        add("Vadodra");
-                        add("Surat");
-                        add("Mehsana");
-                    }
-                });
+//        statesAndCities.putIfAbsent("Gujarat",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Ahmedabad");
+//                        add("Gandhinagar");
+//                        add("Rajakot");
+//                        add("Vadodra");
+//                        add("Surat");
+//                        add("Mehsana");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Maharashtra",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Mumbai");
+//                        add("Thane");
+//                        add("Pune");
+//                        add("Lonawala");
+//                        add("Lonawala");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Rajasthan",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Uttar Pradesh",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Delhi",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Uttrakhand",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Goa",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Bihar",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Karnataka",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Karnatak",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Karnata",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Karnat",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Karna",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Tamil Nadu",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
+//
+//        statesAndCities.putIfAbsent("Chandhighad",
+//                new ArrayList<String>() {
+//                    {
+//                        add("Jaipur");
+//                        add("Udaipur");
+//                        add("Bikaner");
+//                    }
+//                });
 
-        statesAndCities.putIfAbsent("Maharashtra",
-                new ArrayList<String>() {
-                    {
-                        add("Mumbai");
-                        add("Thane");
-                        add("Pune");
-                        add("Lonawala");
-                        add("Lonawala");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Rajasthan",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Uttar Pradesh",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Delhi",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Uttrakhand",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Goa",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Bihar",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Karnataka",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Karnatak",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Karnata",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Karnat",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Karna",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Tamil Nadu",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
-        statesAndCities.putIfAbsent("Chandhighad",
-                new ArrayList<String>() {
-                    {
-                        add("Jaipur");
-                        add("Udaipur");
-                        add("Bikaner");
-                    }
-                });
-
+        new Utils(application.getApplicationContext());
     }
 
     public BaseData getBaseData() {

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.project.healthcare.data.DialogData" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/dialog_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:data="@{data}" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/CustomCardDialogBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardElevation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+
+                    <RadioButton
+                        android:id="@+id/radioButtonFacility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/blue"
+                        android:text="Healthcare Facility"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonGeneral"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:buttonTint="@color/blue"
+                        android:text="Citizen"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/radioButtonFacility"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/radioButtonFacility"
+                        app:layout_constraintTop_toBottomOf="@+id/radioButtonFacility" />
+
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Please select for the type of registration."
+                    android:textColor="@color/blue"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Select Healthcare Facility if you whish to register your establishment."
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView4"
+                    app:layout_constraintStart_toStartOf="@+id/textView4"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <include
+            android:id="@+id/footer"
+            layout="@layout/dialog_footer_single_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:data="@{data}" />
+
+
+    </LinearLayout>
+
+</layout>
