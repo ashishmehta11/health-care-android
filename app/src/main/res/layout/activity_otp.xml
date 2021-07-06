@@ -29,7 +29,7 @@
             android:layout_marginTop="8dp"
             android:text="An OTP has been sent to your registered phone number. Please enter the same below."
             android:textColor="@color/dark_grey"
-            android:textSize="22sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
