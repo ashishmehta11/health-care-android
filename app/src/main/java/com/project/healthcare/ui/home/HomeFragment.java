@@ -20,6 +20,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         viewModel.getBaseData().setTitleBarName("Home");
+        viewModel.getBaseData().setFloatingMenuBtnVisibility(View.VISIBLE);
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

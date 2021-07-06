@@ -31,6 +31,7 @@ public class RegisterCitizen extends Fragment {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register_citizen, container, false);
         }
         viewModel.getBaseData().setTitleBarName("Citizen");
+        viewModel.getBaseData().setFloatingMenuBtnVisibility(View.VISIBLE);
         return binding.getRoot();
     }
 

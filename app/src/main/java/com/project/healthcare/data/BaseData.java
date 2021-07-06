@@ -2,6 +2,7 @@ package com.project.healthcare.data;
 
 import android.content.res.ColorStateList;
 import android.util.Log;
+import android.view.View;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -18,6 +19,7 @@ public class BaseData extends BaseObservable {
     private ColorStateList search;
     private ColorStateList covid;
     private ColorStateList profile;
+    private int floatingMenuBtnVisibility = View.GONE;
 
     public BaseData(ColorStateList blue, ColorStateList transparentWhite) {
         this.blue = blue;
@@ -102,5 +104,15 @@ public class BaseData extends BaseObservable {
     public void setProfile(ColorStateList profile) {
         this.profile = profile;
         notifyPropertyChanged(BR.profile);
+    }
+
+    @Bindable
+    public int getFloatingMenuBtnVisibility() {
+        return floatingMenuBtnVisibility;
+    }
+
+    public void setFloatingMenuBtnVisibility(int floatingMenuBtnVisibility) {
+        this.floatingMenuBtnVisibility = floatingMenuBtnVisibility;
+        notifyPropertyChanged(BR.floatingMenuBtnVisibility);
     }
 }

@@ -18,6 +18,7 @@ import com.project.healthcare.data.DialogData;
 import com.project.healthcare.databinding.ActivityLoginBinding;
 import com.project.healthcare.databinding.DialogRegistrationChoiceBinding;
 import com.project.healthcare.ui.MainActivity;
+import com.project.healthcare.ui.otp.OtpActivity;
 
 import java.util.regex.Pattern;
 
@@ -86,8 +87,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin() {
         if (isEmailCorrect && isPassCorrect) {
-
+            navigateToOtp();
         }
+    }
+
+    private void navigateToOtp() {
+        startActivity(new Intent(this, OtpActivity.class));
     }
 
     private void addTextWatchers() {
@@ -163,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setPasswordIncorrect() {
         binding.incPass.editText.setBackground(AppCompatResources.getDrawable(getApplicationContext(), R.drawable.edit_text_bg_error));
         binding.incPass.txtError.setVisibility(View.VISIBLE);
-        binding.incPass.txtError.setText("Password must be a least 6 characters long.");
+        binding.incPass.txtError.setText("Invalid Password.");
         isPassCorrect = false;
         setLoginBtnColor(R.color.light_blue);
     }
