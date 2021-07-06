@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     LoginActivityViewModel viewModel;
     ActivityLoginBinding binding;
     boolean isEmailCorrect = false, isPassCorrect = false, isPhone = false;
-
+    Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         DialogRegistrationChoiceBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_registration_choice, null, false);
         binding.setData(dialogData);
         builder.setView(binding.getRoot());
-        Dialog dialog = builder.create();
+        dialog = builder.create();
 
         binding.radioGroup.check(R.id.radioButtonGeneral);
         binding.header.btnCloseDialog.setOnClickListener(v -> {
@@ -89,6 +89,13 @@ public class LoginActivity extends AppCompatActivity {
         if (isEmailCorrect && isPassCorrect) {
             navigateToOtp();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        if (dialog != null && dialog.isShowing())
+            dialog.cancel();
+        super.onStop();
     }
 
     private void navigateToOtp() {
@@ -155,6 +162,18 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToHome();
+        super.onBackPressed();
+    }
+
+    private void navigateToHome() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     private void setLoginBtnColor(int p) {
