@@ -17,7 +17,7 @@ import com.project.healthcare.ui.MainActivityViewModel;
 public class Register extends Fragment {
     MainActivityViewModel viewModel;
     FragmentRegisterBinding binding;
-
+    private final static String TAG = "Register Fragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,7 +32,8 @@ public class Register extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.getBaseData().setTitleBarName("Registration");
+//        viewModel.getBaseData().setTitleBarName("Registration");
+//        Log.e(TAG, "onResume: title bar name="+viewModel.getBaseData().getTitleBarName());
     }
 
 }

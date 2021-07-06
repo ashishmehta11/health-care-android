@@ -34,6 +34,7 @@ public class BaseData extends BaseObservable {
 
     public void setTitleBarName(String titleBarName) {
         this.titleBarName = titleBarName;
+        Log.d(TAG, "setTitleBarName: " + this.titleBarName);
         notifyPropertyChanged(BR.titleBarName);
         if (titleBarName.contains("Registration")) {
             setBlue();
@@ -42,7 +43,7 @@ public class BaseData extends BaseObservable {
         }
         if (titleBarName.contains("Home")) {
             setBlue();
-            // setHome(transparentWhite);
+            setHome(transparentWhite);
         }
     }
 

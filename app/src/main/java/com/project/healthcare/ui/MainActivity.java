@@ -5,18 +5,22 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.project.healthcare.R;
 import com.project.healthcare.databinding.ActivityMainBinding;
 import com.project.healthcare.ui.login.LoginActivity;
+
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,17 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        if (viewModel.getBaseData().getTitleBarName().contains("Registration")) {
-            //navController.navigate(R.id.homeFragment);
-            navController.popBackStack(R.id.homeFragment, true);
-        }
-
-        if (viewModel.getBaseData().getTitleBarName().contains("Home")) {
-            //navController.navigate(R.id.homeFragment);
-            finish();
+        switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
+            case R.id.register:
+                navController.popBackStack(R.id.homeFragment, true);
+                return;
+            case R.id.homeFragment:
+                finish();
         }
     }
+
 
     private void attachListeners() {
         //DRAWER LISTENER
@@ -93,22 +95,37 @@ public class MainActivity extends AppCompatActivity {
         //BTN NAV MENU CLOSE
         binding.btnNavMenuClose.setOnClickListener(v -> binding.drawerLayout.closeDrawer(GravityCompat.END));
 
-        attachNavMenuClickListener();
+        attachNavMenuListener();
     }
 
-    private void attachNavMenuClickListener() {
+    private void attachNavMenuListener() {
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable @org.jetbrains.annotations.Nullable Bundle arguments) {
+//                if(destination.getId()==R.id.homeFragment){
+//                    Log.d(TAG, "onDestinationChanged: inside homeFragment");
+//                    viewModel.getBaseData().setTitleBarName("Home");
+//                }
+//                if(destination.getId()==R.id.register){
+//                    Log.d(TAG, "onDestinationChanged: inside register");
+//                    viewModel.getBaseData().setTitleBarName("Registration");
+//                }
+            }
+        });
         // HOME
         binding.navMenuHome.cardView.setOnClickListener(v -> {
             //navController.popBackStack();
 //           navController.navigate(R.id.homeFragment,true);
+//            Log.d(TAG, "attachNavMenuClickListener: hm"+navController.getBackStackEntry(R.id.homeFragment));
+//            Log.d(TAG, "attachNavMenuClickListener: reg"+navController.getBackStackEntry(R.id.register));
             navController.popBackStack(R.id.homeFragment, false);
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
         //LOGIN
         binding.navMenuLogin.cardView.setOnClickListener(v -> {
 
             startActivity(new Intent(this, LoginActivity.class));
-
             binding.drawerLayout.closeDrawer(GravityCompat.END);
         });
 
@@ -135,6 +152,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        viewModel.getBaseData().setTitleBarName("Home");
     }
 }
