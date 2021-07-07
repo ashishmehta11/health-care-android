@@ -99,6 +99,36 @@
     </style>
 
 
+    <style name="CustomCardMoveRight" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_move_right
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_move_right" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">4dp</item>
+        <item name="cornerSizeBottomRight">16dp</item>
+        <item name="cornerSizeBottomLeft">4dp</item>
+    </style>
+
+
+    <style name="CustomCardMoveLeft" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay_card_custom_move_left
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_move_left" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+    </style>
+
+
     <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
 
     </style>

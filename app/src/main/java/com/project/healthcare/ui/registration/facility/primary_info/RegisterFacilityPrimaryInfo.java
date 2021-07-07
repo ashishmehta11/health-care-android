@@ -30,6 +30,11 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
 
         viewModel.getBaseData().setTitleBarName("Primary Info");
         viewModel.getSelectedBottomNumber().setValue(1);
+        attachListeners();
         return binding.getRoot();
+    }
+
+    private void attachListeners() {
+        binding.incMoveRight.cardMoveRight.setContentPadding(0, 0, 0, 0);
     }
 }
