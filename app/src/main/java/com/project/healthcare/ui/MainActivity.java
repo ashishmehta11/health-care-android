@@ -3,7 +3,9 @@ package com.project.healthcare.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,12 +42,65 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupWithNavController(binding.navView, navController);
         attachListeners();
+        addObservers();
         if (getIntent().hasExtra("citizen")) {
             //navController.popBackStack();
             navController.navigate(R.id.register_citizen);
+        } else if (getIntent().hasExtra("facility")) {
+            navController.navigate(R.id.registerFacilityPrimaryInfo);
         }
         //else
         // attachFragment(HomeFragment.class);
+    }
+
+    private void addObservers() {
+        viewModel.getSelectedBottomNumber().observe(this, integer -> {
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.ninety_six)
+                    , getResources().getDimensionPixelSize(R.dimen.ninety_six));
+//            float size = getResources().getDimension(R.dimen.forty_eight_sp);
+            float size = 48;
+            @ColorInt int color = getColor(R.color.transparent_white);
+            setBottomNavCardsToDefault();
+            switch (integer) {
+                case 1:
+                    setValuesInc1(lp, color, size);
+                    break;
+                case 2:
+                    setValuesInc2(lp, color, size);
+                    break;
+                case 3:
+                    setValuesInc3(lp, color, size);
+            }
+        });
+    }
+
+    private void setBottomNavCardsToDefault() {
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.seventy_two)
+                , getResources().getDimensionPixelSize(R.dimen.seventy_two));
+//        float size = getResources().getDimension(R.dimen.thirty_two_sp);
+        float size = 32;
+        @ColorInt int color = getColor(R.color.blue);
+        setValuesInc1(lp, color, size);
+        setValuesInc2(lp, color, size);
+        setValuesInc3(lp, color, size);
+    }
+
+    private void setValuesInc1(FrameLayout.LayoutParams lp, @ColorInt int color, float txtSize) {
+        binding.includeBottomNav.inc1.card.setCardBackgroundColor(color);
+        binding.includeBottomNav.inc1.card.setLayoutParams(lp);
+        binding.includeBottomNav.inc1.textView.setTextSize(txtSize);
+    }
+
+    private void setValuesInc2(FrameLayout.LayoutParams lp, @ColorInt int color, float txtSize) {
+        binding.includeBottomNav.inc2.card.setCardBackgroundColor(color);
+        binding.includeBottomNav.inc2.card.setLayoutParams(lp);
+        binding.includeBottomNav.inc2.textView.setTextSize(txtSize);
+    }
+
+    private void setValuesInc3(FrameLayout.LayoutParams lp, @ColorInt int color, float txtSize) {
+        binding.includeBottomNav.inc3.card.setCardBackgroundColor(color);
+        binding.includeBottomNav.inc3.card.setLayoutParams(lp);
+        binding.includeBottomNav.inc3.textView.setTextSize(txtSize);
     }
 
 
@@ -53,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
             case R.id.register_citizen:
-                navController.popBackStack(R.id.homeFragment, true);
+            case R.id.registerFacilityPrimaryInfo:
+                navController.popBackStack(R.id.homeFragment, false);
                 return;
             case R.id.homeFragment:
                 finish();
@@ -79,10 +135,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END))
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                     binding.cardMenu.setVisibility(View.GONE);
-                else
-                    binding.cardMenu.setVisibility(View.VISIBLE);
+                    binding.includeBottomNav.btnMenu.setVisibility(View.INVISIBLE);
+                } else {
+                    if (Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.registerFacilityPrimaryInfo)
+                        binding.cardMenu.setVisibility(View.VISIBLE);
+                    binding.includeBottomNav.btnMenu.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -96,6 +156,37 @@ public class MainActivity extends AppCompatActivity {
         binding.btnNavMenuClose.setOnClickListener(v -> binding.drawerLayout.closeDrawer(GravityCompat.END));
 
         attachNavMenuListener();
+        attachBottomNavMenuListener();
+    }
+
+    private void attachBottomNavMenuListener() {
+        binding.includeBottomNav.btnMenu.setOnClickListener(v -> {
+            binding.drawerLayout.openDrawer(GravityCompat.END);
+            binding.includeBottomNav.btnMenu.setVisibility(View.INVISIBLE);
+        });
+
+        binding.includeBottomNav.card1.setOnClickListener(v -> {
+            viewModel.getSelectedBottomNumber().setValue(1);
+            if (navController.getCurrentDestination().getId() != R.id.recyclerFacilityList) {
+                navController.popBackStack(R.id.registerFacilityPrimaryInfo, false);
+            }
+        });
+
+        binding.includeBottomNav.card2.setOnClickListener(v -> {
+            viewModel.getSelectedBottomNumber().setValue(2);
+            if (navController.getCurrentDestination().getId() == R.id.registerFacilityPrimaryInfo) {
+//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
+//                navController.navigate(R.id.registerFacilityPrimaryInfo);
+            }
+        });
+
+        binding.includeBottomNav.card3.setOnClickListener(v -> {
+            viewModel.getSelectedBottomNumber().setValue(3);
+            if (navController.getCurrentDestination().getId() == R.id.registerFacilityPrimaryInfo) {
+//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
+//                navController.navigate(R.id.registerFacilityPrimaryInfo);
+            }
+        });
     }
 
     private void attachNavMenuListener() {

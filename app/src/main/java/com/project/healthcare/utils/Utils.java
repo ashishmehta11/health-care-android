@@ -37,7 +37,6 @@ public class Utils {
                 }
                 MainActivityViewModel.statesAndCities.putIfAbsent(key, values);
             }
-
         } catch (Exception ignore) {
 
         }

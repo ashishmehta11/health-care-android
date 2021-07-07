@@ -31,6 +31,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:visibility="@{data.floatingMenuBtnVisibility}"
             android:id="@+id/cardMenu"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -44,7 +45,6 @@
 
             <ImageButton
                 android:id="@+id/btnMenu"
-                android:visibility="@{data.floatingMenuBtnVisibility}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="@android:color/transparent"
@@ -78,11 +78,22 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/navigation"
+            app:layout_constraintBottom_toTopOf="@+id/includeBottomNav"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleBarCard"
+            app:navGraph="@navigation/navigation" />
+
+        <include
+            android:id="@+id/includeBottomNav"
+            layout="@layout/facility_registration_bottom_nav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="@{data.registerBottomNavVisibility}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleBarCard" />
+            bind:data="@{data}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

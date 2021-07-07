@@ -21,4 +21,8 @@
         android:id="@+id/register_citizen"
         android:name="com.project.healthcare.ui.registration.citizen.RegisterCitizen"
         android:label="Register" />
+    <fragment
+        android:id="@+id/registerFacilityPrimaryInfo"
+        android:name="com.project.healthcare.ui.registration.facility.primary_info.RegisterFacilityPrimaryInfo"
+        android:label="RegisterFacilityPrimaryInfo" />
 </navigation>

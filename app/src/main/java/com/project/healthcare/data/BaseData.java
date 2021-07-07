@@ -19,7 +19,10 @@ public class BaseData extends BaseObservable {
     private ColorStateList search;
     private ColorStateList covid;
     private ColorStateList profile;
-    private int floatingMenuBtnVisibility = View.GONE;
+
+
+    private int floatingMenuBtnVisibility = View.GONE, registerBottomNavVisibility = View.GONE;
+
 
     public BaseData(ColorStateList blue, ColorStateList transparentWhite) {
         this.blue = blue;
@@ -35,6 +38,7 @@ public class BaseData extends BaseObservable {
         setCovid(blue);
     }
 
+
     @Bindable
     public String getTitleBarName() {
         return titleBarName;
@@ -43,7 +47,12 @@ public class BaseData extends BaseObservable {
     public void setTitleBarName(String titleBarName) {
         this.titleBarName = titleBarName;
         Log.d(TAG, "setTitleBarName: " + this.titleBarName);
+        setUIChanges();
         notifyPropertyChanged(BR.titleBarName);
+    }
+
+    private void setUIChanges() {
+        int visibilityMenuBtn = View.VISIBLE, visibilityBottomMenu = View.GONE;
         if (titleBarName.contains("Citizen") || titleBarName.contains("Healthcare Facility")) {
             setBlue();
             setLogin(transparentWhite);
@@ -52,6 +61,14 @@ public class BaseData extends BaseObservable {
             setBlue();
             setHome(transparentWhite);
         }
+        if (titleBarName.contains("Primary Info")) {
+            visibilityMenuBtn = View.GONE;
+            visibilityBottomMenu = View.VISIBLE;
+            setBlue();
+            setLogin(transparentWhite);
+        }
+        setFloatingMenuBtnVisibility(visibilityMenuBtn);
+        setRegisterBottomNavVisibility(visibilityBottomMenu);
     }
 
 
@@ -115,4 +132,15 @@ public class BaseData extends BaseObservable {
         this.floatingMenuBtnVisibility = floatingMenuBtnVisibility;
         notifyPropertyChanged(BR.floatingMenuBtnVisibility);
     }
+
+    @Bindable
+    public int getRegisterBottomNavVisibility() {
+        return registerBottomNavVisibility;
+    }
+
+    public void setRegisterBottomNavVisibility(int registerBottomNavVisibility) {
+        this.registerBottomNavVisibility = registerBottomNavVisibility;
+        notifyPropertyChanged(BR.registerBottomNavVisibility);
+    }
+
 }
