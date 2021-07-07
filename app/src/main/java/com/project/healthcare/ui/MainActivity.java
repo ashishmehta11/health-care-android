@@ -2,6 +2,7 @@ package com.project.healthcare.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             //navController.popBackStack();
             navController.navigate(R.id.register_citizen);
         } else if (getIntent().hasExtra("facility")) {
-            navController.navigate(R.id.registerFacilityPrimaryInfo);
+            viewModel.getSelectedBottomNumber().setValue(1);
         }
         //else
         // attachFragment(HomeFragment.class);
@@ -57,19 +58,51 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getSelectedBottomNumber().observe(this, integer -> {
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.ninety_six)
                     , getResources().getDimensionPixelSize(R.dimen.ninety_six));
+            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.seventy_two)
+                    , getResources().getDimensionPixelSize(R.dimen.seventy_two));
 //            float size = getResources().getDimension(R.dimen.forty_eight_sp);
-            float size = 48;
+            float size = 48, smallSize = 32;
             @ColorInt int color = getColor(R.color.transparent_white);
-            setBottomNavCardsToDefault();
+            @ColorInt int colorLight = getColor(R.color.light_blue);
             switch (integer) {
                 case 1:
+                    if (navController.getCurrentDestination().getId() != R.id.recyclerFacilityList) {
+                        navController.navigate(R.id.registerFacilityPrimaryInfo);
+                        navController.popBackStack(R.id.registerFacilityPrimaryInfo, false);
+                        setBottomNavCardsToDefault();
+                    }
                     setValuesInc1(lp, color, size);
+
+
+                    if (viewModel.getHealthFacility().getCompletedStages() == 0) {
+                        setValuesInc2(lps, colorLight, smallSize);
+                        setValuesInc3(lps, colorLight, smallSize);
+                    }
+                    if (viewModel.getHealthFacility().getCompletedStages() == 1) {
+                        setValuesInc3(lps, colorLight, smallSize);
+                    }
+
                     break;
                 case 2:
-                    setValuesInc2(lp, color, size);
+                    if (viewModel.getHealthFacility().getCompletedStages() > 0) {
+//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
+//                navController.navigate(R.id.registerFacilityPrimaryInfo);
+                        Log.d(TAG, "addObservers: Here inside 1 st stage completed ");
+                        setBottomNavCardsToDefault();
+                        setValuesInc2(lp, color, size);
+
+                        if (viewModel.getHealthFacility().getCompletedStages() < 3) {
+                            setValuesInc3(lps, colorLight, smallSize);
+                        }
+                    }
                     break;
                 case 3:
-                    setValuesInc3(lp, color, size);
+                    if (viewModel.getHealthFacility().getCompletedStages() > 1) {
+//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
+//                navController.navigate(R.id.registerFacilityPrimaryInfo);
+                        setBottomNavCardsToDefault();
+                        setValuesInc3(lp, color, size);
+                    }
             }
         });
     }
@@ -167,25 +200,15 @@ public class MainActivity extends AppCompatActivity {
 
         binding.includeBottomNav.card1.setOnClickListener(v -> {
             viewModel.getSelectedBottomNumber().setValue(1);
-            if (navController.getCurrentDestination().getId() != R.id.recyclerFacilityList) {
-                navController.popBackStack(R.id.registerFacilityPrimaryInfo, false);
-            }
         });
 
         binding.includeBottomNav.card2.setOnClickListener(v -> {
             viewModel.getSelectedBottomNumber().setValue(2);
-            if (navController.getCurrentDestination().getId() == R.id.registerFacilityPrimaryInfo) {
-//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
-//                navController.navigate(R.id.registerFacilityPrimaryInfo);
-            }
         });
 
         binding.includeBottomNav.card3.setOnClickListener(v -> {
             viewModel.getSelectedBottomNumber().setValue(3);
-            if (navController.getCurrentDestination().getId() == R.id.registerFacilityPrimaryInfo) {
-//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
-//                navController.navigate(R.id.registerFacilityPrimaryInfo);
-            }
+
         });
     }
 

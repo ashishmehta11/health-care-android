@@ -173,6 +173,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Pin Code"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="16sp" />
+
+                <include
+                    android:id="@+id/pinCode"
+                    layout="@layout/text_field_number_zip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -240,7 +256,7 @@
                     layout="@layout/text_field_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="72dp" />
+                    android:layout_marginBottom="190dp" />
 
 
             </LinearLayout>
