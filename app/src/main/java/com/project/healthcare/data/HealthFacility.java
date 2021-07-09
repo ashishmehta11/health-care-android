@@ -7,21 +7,16 @@ public class HealthFacility {
     private ArrayList<String> phoneNumbers = new ArrayList<>();
     private ArrayList<String> emails = new ArrayList<>();
     private int completedStages = 0;
+    private ArrayList<FacilityType> typeOfFacility = new ArrayList<>();
+    private ArrayList<SpecialityType> specialities = new ArrayList<>();
+    private ArrayList<Object> services = new ArrayList<>();
 
     public HealthFacility() {
         phoneNumbers.add("");
         emails.add("");
     }
 
-    public HealthFacility(String name,
-                          String address,
-                          String state,
-                          String city,
-                          String pinCode,
-                          String password,
-                          String establishmentDate,
-                          ArrayList<String> phoneNumbers,
-                          ArrayList<String> emails) {
+    public HealthFacility(String name, String address, String state, String city, String pinCode, String password, String establishmentDate, ArrayList<String> phoneNumbers, ArrayList<String> emails, ArrayList<FacilityType> typeOfFacility, ArrayList<SpecialityType> specialities, ArrayList<Object> services) {
         this.name = name;
         this.address = address;
         this.state = state;
@@ -31,8 +26,10 @@ public class HealthFacility {
         this.establishmentDate = establishmentDate;
         this.phoneNumbers = phoneNumbers;
         this.emails = emails;
+        this.typeOfFacility = typeOfFacility;
+        this.specialities = specialities;
+        this.services = services;
     }
-
 
     public String getName() {
         return name;
@@ -110,5 +107,17 @@ public class HealthFacility {
 
     public void setCompletedStages(int completedStages) {
         this.completedStages = completedStages;
+    }
+
+    public ArrayList<FacilityType> getTypeOfFacility() {
+        return typeOfFacility;
+    }
+
+    public ArrayList<SpecialityType> getSpecialities() {
+        return specialities;
+    }
+
+    public ArrayList<Object> getServices() {
+        return services;
     }
 }

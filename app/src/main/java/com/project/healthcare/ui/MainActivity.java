@@ -85,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 2:
                     if (viewModel.getHealthFacility().getCompletedStages() > 0) {
-//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
-//                navController.navigate(R.id.registerFacilityPrimaryInfo);
+                        if (navController.getCurrentDestination().getId() != R.id.facilityInfo) {
+                            navController.navigate(R.id.facilityInfo);
+                            navController.popBackStack(R.id.facilityInfo, false);
+                        }
                         Log.d(TAG, "addObservers: Here inside 1 st stage completed ");
                         setBottomNavCardsToDefault();
                         setValuesInc2(lp, color, size);
@@ -143,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.register_citizen:
             case R.id.registerFacilityPrimaryInfo:
                 navController.popBackStack(R.id.homeFragment, false);
+                return;
+            case R.id.facilityInfo:
+                viewModel.getSelectedBottomNumber().setValue(1);
                 return;
             case R.id.homeFragment:
                 finish();

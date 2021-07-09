@@ -21,6 +21,7 @@ public class BaseData extends BaseObservable {
     private ColorStateList profile;
 
 
+
     private int floatingMenuBtnVisibility = View.GONE, registerBottomNavVisibility = View.GONE;
 
 
@@ -61,7 +62,7 @@ public class BaseData extends BaseObservable {
             setBlue();
             setHome(transparentWhite);
         }
-        if (titleBarName.contains("Primary Info")) {
+        if (titleBarName.contains("Primary Info") || titleBarName.contains("Establishment Info")) {
             visibilityMenuBtn = View.GONE;
             visibilityBottomMenu = View.VISIBLE;
             setBlue();

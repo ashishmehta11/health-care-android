@@ -1,9 +1,9 @@
 package com.project.healthcare.ui.registration.facility.primary_info;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +27,7 @@ import com.project.healthcare.databinding.FragmentRegisterFacilityPrimaryInfoBin
 import com.project.healthcare.ui.MainActivityViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -103,10 +104,23 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
     }
 
     private void attachListeners() {
+        final Calendar newCalendar = Calendar.getInstance();
+        final DatePickerDialog startTime = new DatePickerDialog(requireActivity(), (DatePickerDialog.OnDateSetListener) (view, year, monthOfYear, dayOfMonth) -> {
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, monthOfYear, dayOfMonth);
+            binding.dateOfEstablishment.editText.setText(dayOfMonth + "-" + monthOfYear + "-" + year);
+            viewModel.getHealthFacility().setEstablishmentDate(dayOfMonth + "-" + monthOfYear + "-" + year);
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        binding.dateOfEstablishment.editText.setOnClickListener(v -> {
+            startTime.show();
+        });
+        binding.dateOfEstablishment.editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus)
+                startTime.show();
+        });
+
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
-            Log.d(TAG, "attachListeners: onCLick of cardMove");
-            if (validateAll()) {
-                Log.d(TAG, "attachListeners: insideValidateAll()");
+            if (viewModel.getHealthFacility().getCompletedStages() > 0 || true) {
                 if (viewModel.getHealthFacility().getCompletedStages() < 1)
                     viewModel.getHealthFacility().setCompletedStages(1);
                 viewModel.getSelectedBottomNumber().setValue(2);
@@ -328,21 +342,29 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
     }
 
     private boolean validateAll() {
+        boolean success = true;
         if (!validateNameRegex(viewModel.getHealthFacility().getName()))
-            return false;
+            success = false;
         if (viewModel.getHealthFacility().getAddress().length() < 3)
-            return false;
+            success = false;
         if (!validatePinCodeRegex(viewModel.getHealthFacility().getPinCode()))
-            return false;
+            success = false;
         if (viewModel.getHealthFacility().getPassword().length() < 6)
-            return false;
+            success = false;
         for (int i = 0; i < viewModel.getHealthFacility().getEmails().size(); i++)
             if (!validateEmailRegex(viewModel.getHealthFacility().getEmails().get(i)))
-                return false;
+                success = false;
         for (int i = 0; i < viewModel.getHealthFacility().getPhoneNumbers().size(); i++)
             if (!validatePhoneNumberRegex(viewModel.getHealthFacility().getPhoneNumbers().get(i)))
-                return false;
-        return true;
+                success = false;
+        if (viewModel.getHealthFacility().getEstablishmentDate().isEmpty())
+            success = false;
+
+        if (success)
+            viewModel.getHealthFacility().setCompletedStages(1);
+        else
+            viewModel.getHealthFacility().setCompletedStages(0);
+        return success;
     }
 
     private void validateEmails(String ss, EditText ed, TextView tv) {
