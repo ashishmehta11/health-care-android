@@ -1,6 +1,5 @@
-package com.project.healthcare.ui.registration.facility.facility_info;
+package com.project.healthcare.ui.registration.facility.service_info;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,30 +17,29 @@ import java.util.List;
 import java.util.Observable;
 
 
-public class RecyclerTypeOfSpecialityAdapter extends RecyclerView.Adapter<RecyclerTypeOfSpecialityAdapter.ViewHolder> {
-    private static final String TAG = "RecyclerFacilities";
+public class RecyclerSelectedSpecialityTypeAdapter extends RecyclerView.Adapter<RecyclerSelectedSpecialityTypeAdapter.ViewHolder> {
     private final ArrayList<SpecialityType> list;
-    private final SpecialityAddedNotifier notifier;
 
-    public RecyclerTypeOfSpecialityAdapter(List<SpecialityType> list, SpecialityAddedNotifier notifier) {
-        this.list = new ArrayList<>(list);
+    private final SpecialityRemovedNotifier notifier;
+
+    public RecyclerSelectedSpecialityTypeAdapter(List<SpecialityType> list, SpecialityRemovedNotifier notifier) {
         this.notifier = notifier;
+        this.list = new ArrayList<>(list);
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_reg_type_of_facility_item, parent, false));
+                .inflate(R.layout.recycler_reg_selected_facility_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        SpecialityType ft = list.get(position);
         holder.txt.setText(SpecialityType.toString(list.get(position)));
-        holder.add.setOnClickListener(v -> {
-            Log.d(TAG, "onBindViewHolder: inside add : on click : " + holder.txt.getText().toString());
-            notifier.notifyTypeAdded(list.get(position));
+        holder.remove.setOnClickListener(v -> {
+            notifier.notifyRemoval(ft);
         });
     }
 
@@ -55,19 +53,19 @@ public class RecyclerTypeOfSpecialityAdapter extends RecyclerView.Adapter<Recycl
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton add;
+        ImageButton remove;
         TextView txt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            add = itemView.findViewById(R.id.btnAdd);
-            txt = itemView.findViewById(R.id.txtTypeOfFacility);
+            remove = itemView.findViewById(R.id.btnRemove);
+            txt = itemView.findViewById(R.id.txtSelectedType);
 
         }
     }
 
-    static class SpecialityAddedNotifier extends Observable {
-        public void notifyTypeAdded(SpecialityType t) {
+    static class SpecialityRemovedNotifier extends Observable {
+        public void notifyRemoval(SpecialityType t) {
             setChanged();
             notifyObservers(t);
         }

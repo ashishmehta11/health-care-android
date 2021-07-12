@@ -6,7 +6,7 @@
     android:layout_margin="4dp"
     android:minHeight="60dp"
     android:layout_gravity="center"
-    app:cardBackgroundColor="@color/blue"
+    app:cardBackgroundColor="@color/light_yellow"
     app:cardCornerRadius="24dp"
     app:cardElevation="2dp">
 
@@ -29,6 +29,7 @@
             android:gravity="center"
             android:text="Physical medicine and rehabilitation"
             android:textSize="14sp"
+            android:textColor="@color/dark_grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnAdd"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_add_white" />
+            app:srcCompat="@drawable/ic_add_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -28,9 +28,16 @@
         <action
             android:id="@+id/action_registerFacilityPrimaryInfo_to_facilityInfo"
             app:destination="@id/facilityInfo" />
+        <action
+            android:id="@+id/action_registerFacilityPrimaryInfo_to_serviceInfo"
+            app:destination="@id/serviceInfo" />
     </fragment>
     <fragment
         android:id="@+id/facilityInfo"
         android:name="com.project.healthcare.ui.registration.facility.facility_info.FacilityInfo"
         android:label="FacilityInfo" />
+    <fragment
+        android:id="@+id/serviceInfo"
+        android:name="com.project.healthcare.ui.registration.facility.service_info.ServiceInfo"
+        android:label="ServiceInfo" />
 </navigation>

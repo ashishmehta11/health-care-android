@@ -154,7 +154,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         });
 
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
-            if (viewModel.getHealthFacility().getCompletedStages() > 0) {
+            if (viewModel.getHealthFacility().getCompletedStages() > 0 || true) {
                 if (viewModel.getHealthFacility().getCompletedStages() < 1)
                     viewModel.getHealthFacility().setCompletedStages(1);
                 viewModel.getSelectedBottomNumber().setValue(2);

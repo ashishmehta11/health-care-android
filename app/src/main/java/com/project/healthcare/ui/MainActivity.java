@@ -102,8 +102,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 3:
                     if (viewModel.getHealthFacility().getCompletedStages() > 1) {
-//                navController.popBackStack(R.id.registerFacilityPrimaryInfo,true);
-//                navController.navigate(R.id.registerFacilityPrimaryInfo);
+                        if (navController.getCurrentDestination().getId() != R.id.serviceInfo) {
+                            navController.navigate(R.id.serviceInfo);
+                            navController.popBackStack(R.id.serviceInfo, false);
+                        }
                         setBottomNavCardsToDefault();
                         setValuesInc3(lp, color, size);
                     }
@@ -150,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.facilityInfo:
                 viewModel.getSelectedBottomNumber().setValue(1);
                 return;
+            case R.id.serviceInfo:
+                viewModel.getSelectedBottomNumber().setValue(2);
+                return;
             case R.id.homeFragment:
                 finish();
         }
@@ -178,7 +183,9 @@ public class MainActivity extends AppCompatActivity {
                     binding.cardMenu.setVisibility(View.GONE);
                     binding.includeBottomNav.btnMenu.setVisibility(View.INVISIBLE);
                 } else {
-                    if (Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.registerFacilityPrimaryInfo)
+                    if (Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.registerFacilityPrimaryInfo ||
+                            Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.facilityInfo ||
+                            Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.serviceInfo)
                         binding.cardMenu.setVisibility(View.VISIBLE);
                     binding.includeBottomNav.btnMenu.setVisibility(View.VISIBLE);
                 }

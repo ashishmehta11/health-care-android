@@ -31,14 +31,12 @@ public class FacilityInfo extends Fragment implements Observer {
     private static final String TAG = "FacilityInfo";
     private final RecyclerTypeOfFacilityAdapter.FacilityAddedNotifier facilityTypeAddedNotifier = new RecyclerTypeOfFacilityAdapter.FacilityAddedNotifier();
     private final RecyclerSelectedFacilityTypeAdapter.FacilityRemovedNotifier facilityTypeRemovedNotifier = new RecyclerSelectedFacilityTypeAdapter.FacilityRemovedNotifier();
-    private final RecyclerSelectedSpecialityTypeAdapter.SpecialityRemovedNotifier specialityRemovedNotifier = new RecyclerSelectedSpecialityTypeAdapter.SpecialityRemovedNotifier();
-    private final RecyclerTypeOfSpecialityAdapter.SpecialityAddedNotifier specialityAddedNotifier = new RecyclerTypeOfSpecialityAdapter.SpecialityAddedNotifier();
+
     MainActivityViewModel viewModel;
     FragmentFacilityInfoBinding binding;
     RecyclerTypeOfFacilityAdapter typeOfFacilityAdapter;
     RecyclerSelectedFacilityTypeAdapter selectedFacilityTypeAdapter;
-    RecyclerTypeOfSpecialityAdapter typeOfSpecialityAdapter;
-    RecyclerSelectedSpecialityTypeAdapter selectedSpecialityTypeAdapter;
+
     ArrayAdapter<CharSequence> managedByAdapter;
     ArrayList<FacilityType> facType = new ArrayList<>(Arrays.asList(FacilityType.values()));
 
@@ -52,8 +50,6 @@ public class FacilityInfo extends Fragment implements Observer {
 
         facilityTypeAddedNotifier.addObserver(this);
         facilityTypeRemovedNotifier.addObserver(this);
-        specialityRemovedNotifier.addObserver(this);
-        specialityAddedNotifier.addObserver(this);
         viewModel.getBaseData().setTitleBarName("Establishment Info");
         attachAdapters();
         attachListeners();
@@ -162,7 +158,8 @@ public class FacilityInfo extends Fragment implements Observer {
             success = false;
         }
         if (success) {
-            viewModel.getHealthFacility().setCompletedStages(2);
+            if (viewModel.getHealthFacility().getCompletedStages() < 2)
+                viewModel.getHealthFacility().setCompletedStages(2);
             binding.incMoveRight.cardMoveRight.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
         } else {
             viewModel.getHealthFacility().setCompletedStages(1);
@@ -175,8 +172,11 @@ public class FacilityInfo extends Fragment implements Observer {
         binding.incMoveLeft.cardMoveLeft.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
         binding.incMoveLeft.btnMoveLeft.setOnClickListener(v -> viewModel.getSelectedBottomNumber().setValue(1));
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
-            if (validateAll())
+            if (validateAll() || true) {
+                if (viewModel.getHealthFacility().getCompletedStages() < 2)
+                    viewModel.getHealthFacility().setCompletedStages(2);
                 viewModel.getSelectedBottomNumber().setValue(3);
+            }
         });
     }
 
@@ -199,10 +199,7 @@ public class FacilityInfo extends Fragment implements Observer {
         binding.recyclerRegSelectedFacilityTypes.setAdapter(selectedFacilityTypeAdapter);
         binding.recyclerRegTypeOfFacility.setAdapter(typeOfFacilityAdapter);
 
-//        typeOfSpecialityAdapter = new RecyclerTypeOfSpecialityAdapter(Arrays.asList(SpecialityType.values()), specialityAddedNotifier);
-//        selectedSpecialityTypeAdapter = new RecyclerSelectedSpecialityTypeAdapter(specialityRemovedNotifier);
-//        binding.recyclerRegTypeOfSpeciality.setAdapter(typeOfSpecialityAdapter);
-//        binding.recyclerRegSelectedSpecialityTypes.setAdapter(selectedSpecialityTypeAdapter);
+
     }
 
     private void prepareSpinner() {

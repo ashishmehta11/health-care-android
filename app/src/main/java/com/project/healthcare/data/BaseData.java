@@ -62,7 +62,7 @@ public class BaseData extends BaseObservable {
             setBlue();
             setHome(transparentWhite);
         }
-        if (titleBarName.contains("Primary Info") || titleBarName.contains("Establishment Info")) {
+        if (titleBarName.contains("Primary Info") || titleBarName.contains("Establishment Info") || titleBarName.contains("Provided Services")) {
             visibilityMenuBtn = View.GONE;
             visibilityBottomMenu = View.VISIBLE;
             setBlue();
