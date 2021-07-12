@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel viewModel;
     private static final String TAG = "HomeActivity";
     private NavController navController;
+    private final float size = 40;
+    private final float smallSize = 24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void addObservers() {
         viewModel.getSelectedBottomNumber().observe(this, integer -> {
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.ninety_six)
-                    , getResources().getDimensionPixelSize(R.dimen.ninety_six));
-            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.seventy_two)
-                    , getResources().getDimensionPixelSize(R.dimen.seventy_two));
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.eighty)
+                    , getResources().getDimensionPixelSize(R.dimen.eighty));
+            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.fifty_six)
+                    , getResources().getDimensionPixelSize(R.dimen.fifty_six));
 //            float size = getResources().getDimension(R.dimen.forty_eight_sp);
-            float size = 48, smallSize = 32;
+
             @ColorInt int color = getColor(R.color.transparent_white);
             @ColorInt int colorLight = getColor(R.color.light_blue);
             switch (integer) {
@@ -110,14 +112,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBottomNavCardsToDefault() {
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.seventy_two)
-                , getResources().getDimensionPixelSize(R.dimen.seventy_two));
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.fifty_six)
+                , getResources().getDimensionPixelSize(R.dimen.fifty_six));
 //        float size = getResources().getDimension(R.dimen.thirty_two_sp);
-        float size = 32;
         @ColorInt int color = getColor(R.color.blue);
-        setValuesInc1(lp, color, size);
-        setValuesInc2(lp, color, size);
-        setValuesInc3(lp, color, size);
+        setValuesInc1(lp, color, smallSize);
+        setValuesInc2(lp, color, smallSize);
+        setValuesInc3(lp, color, smallSize);
     }
 
     private void setValuesInc1(FrameLayout.LayoutParams lp, @ColorInt int color, float txtSize) {

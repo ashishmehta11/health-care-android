@@ -3,7 +3,8 @@ package com.project.healthcare.data;
 import java.util.ArrayList;
 
 public class HealthFacility {
-    private String name = "", address = "", state = "Andhra Pradesh", city, pinCode = "", password = "", establishmentDate = "";
+    private String name = "", address = "", state = "Andhra Pradesh", city = "", pinCode = "", password = "", establishmentDate = "", managedByName = "", avgPrice = "";
+    private ManagedBy managedBy;
     private ArrayList<String> phoneNumbers = new ArrayList<>();
     private ArrayList<String> emails = new ArrayList<>();
     private int completedStages = 0;
@@ -119,5 +120,29 @@ public class HealthFacility {
 
     public ArrayList<Object> getServices() {
         return services;
+    }
+
+    public String getManagedByName() {
+        return managedByName;
+    }
+
+    public void setManagedByName(String managedByName) {
+        this.managedByName = managedByName;
+    }
+
+    public ManagedBy getManagedBy() {
+        return managedBy;
+    }
+
+    public void setManagedBy(ManagedBy managedBy) {
+        this.managedBy = managedBy;
+    }
+
+    public String getAvgPrice() {
+        return avgPrice;
+    }
+
+    public void setAvgPrice(String avgPrice) {
+        this.avgPrice = avgPrice;
     }
 }

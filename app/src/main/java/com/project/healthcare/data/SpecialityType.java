@@ -6,5 +6,13 @@ public enum SpecialityType {
     Dentist,
     Ophthalmology,
     Neurology,
-    Pediatrician,
+    Pediatrician;
+
+    public static String toString(SpecialityType type) {
+        return type.toString().replace('_', ' ');
+    }
+
+    public static SpecialityType fromString(String s) {
+        return valueOf(s.replace(' ', '_'));
+    }
 }

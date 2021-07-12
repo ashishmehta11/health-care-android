@@ -33,6 +33,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
+
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
@@ -40,64 +41,23 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Please provide details about the facilities provided by your establishment."
+            android:text="Please provide details about the type of your establishment."
             android:textColor="@color/blue"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
-            android:text="Type of establishment"
-            android:textColor="@color/dark_grey"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView9"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView9"
-            app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerRegSelectedFacilityTypes"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="@+id/textView9"
-            app:layout_constraintStart_toStartOf="@+id/textView9"
-            app:layout_constraintTop_toBottomOf="@+id/textView8"
-            tools:itemCount="3"
-            tools:listitem="@layout/recycler_reg_selected_facility_item">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerRegTypeOfFacility"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:maxHeight="250dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintEnd_toEndOf="@+id/recyclerRegSelectedFacilityTypes"
-            app:layout_constraintStart_toStartOf="@+id/recyclerRegSelectedFacilityTypes"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerRegSelectedFacilityTypes"
-            app:spanCount="2"
-            tools:itemCount="3"
-            tools:listitem="@layout/recycler_reg_type_of_facility_item" />
 
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerRegTypeOfFacility"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toBottomOf="@+id/textView9"
+            app:layout_constraintVertical_bias="0.0">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,12 +66,119 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Type of establishment"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView9"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="Please select all the titles affiliated with your establishment"
+                    android:textColor="@color/light_grey"
+                    app:layout_constraintEnd_toEndOf="@+id/textView10"
+                    app:layout_constraintStart_toStartOf="@+id/textView10"
+                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerRegSelectedFacilityTypes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="@+id/textView9"
+                    app:layout_constraintStart_toStartOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/recycler_reg_selected_facility_item" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerRegTypeOfFacility"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="@+id/recyclerRegSelectedFacilityTypes"
+                    app:layout_constraintStart_toStartOf="@+id/recyclerRegSelectedFacilityTypes"
+                    app:layout_constraintTop_toBottomOf="@+id/recyclerRegSelectedFacilityTypes"
+                    app:spanCount="2"
+                    tools:itemCount="6"
+                    tools:listitem="@layout/recycler_reg_type_of_facility_item" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Managed By"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="Please select the type of management under which this establishment functions."
+                    android:textColor="@color/light_grey"
+                    app:layout_constraintEnd_toEndOf="@+id/textView10"
+                    app:layout_constraintStart_toStartOf="@+id/textView10"
+                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+                <Spinner
+                    android:id="@+id/spinnerManagedBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    tools:listitem="@layout/spinner_list_item_small_font" />
+
+                <TextView
+                    android:id="@+id/lblManagedByName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Name of the managing entity"
+                    android:textColor="@color/light_grey" />
+
+
+                <include
+                    android:id="@+id/managedByName"
+                    layout="@layout/text_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginBottom="4dp"
+                    android:layout_marginTop="16dp"
                     android:text="Average Consulting Fees(Rs.)"
                     android:textColor="@color/dark_grey"
                     android:textSize="16sp" />
@@ -119,6 +186,7 @@
 
                 <include
                     android:id="@+id/avgFees"
+                    android:layout_marginBottom="104dp"
                     layout="@layout/text_field_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -126,19 +194,69 @@
             </LinearLayout>
         </ScrollView>
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:text="Please select alll the titles affiliated with your establishment"
-
-            android:textColor="@color/light_grey"
-            app:layout_constraintEnd_toEndOf="@+id/textView10"
-            app:layout_constraintStart_toStartOf="@+id/textView10"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+
+    <!--
+
+     <TextView
+                android:id="@+id/textView10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:text="Type of establishment"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textView9"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textView9"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+
+
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:text="Please select alll the titles affiliated with your establishment"
+                android:textColor="@color/light_grey"
+                app:layout_constraintEnd_toEndOf="@+id/textView10"
+                app:layout_constraintStart_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerRegSelectedFacilityTypes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="@+id/textView9"
+                app:layout_constraintStart_toStartOf="@+id/textView9"
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                tools:itemCount="3"
+                tools:listitem="@layout/recycler_reg_selected_facility_item">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerRegTypeOfFacility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="@+id/recyclerRegSelectedFacilityTypes"
+                app:layout_constraintStart_toStartOf="@+id/recyclerRegSelectedFacilityTypes"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerRegSelectedFacilityTypes"
+                app:spanCount="2"
+                tools:itemCount="3"
+                tools:listitem="@layout/recycler_reg_type_of_facility_item" />
+
+    -->

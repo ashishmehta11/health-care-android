@@ -6,5 +6,5 @@
     android:ellipsize="end"
     android:maxLines="1"
     android:text="Gujarat"
-    android:textColor="@color/dark_grey"
+    android:textColor="@color/blue"
     android:textSize="18sp" />

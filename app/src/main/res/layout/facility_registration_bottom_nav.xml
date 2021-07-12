@@ -18,9 +18,10 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
+            android:layout_marginBottom="96dp"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginBottom="112dp"
+            android:visibility="gone"
             android:padding="24dp"
             app:cardBackgroundColor="@color/blue"
             app:layout_constraintBottom_toTopOf="@+id/materialCard"
@@ -40,78 +41,95 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/btnMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:background="@android:color/transparent"
-                android:padding="12dp"
-                app:srcCompat="@drawable/ic_menu" />
+
+                <ImageButton
+                    android:id="@+id/btnMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="end"
+                    android:background="@android:color/transparent"
+                    android:padding="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_menu" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnMenu"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <include
+                        android:id="@+id/inc_3"
+                        layout="@layout/register_bottom_nav_card_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        bind:data="@{data}" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/card3"
+                    app:layout_constraintStart_toEndOf="@+id/card1"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <include
+                        android:id="@+id/inc_2"
+                        layout="@layout/register_bottom_nav_card_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        bind:data="@{data}" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <include
+                        android:id="@+id/inc_1"
+                        layout="@layout/register_bottom_nav_card_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        bind:data="@{data}" />
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
-            app:cardBackgroundColor="@color/blue"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/materialCard"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <include
-                android:id="@+id/inc_1"
-                layout="@layout/register_bottom_nav_card_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                bind:data="@{data}" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            app:cardBackgroundColor="@color/blue"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/materialCard"
-            app:layout_constraintEnd_toStartOf="@+id/card3"
-            app:layout_constraintStart_toEndOf="@+id/card1">
-
-            <include
-                android:id="@+id/inc_2"
-                layout="@layout/register_bottom_nav_card_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                bind:data="@{data}" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            app:cardBackgroundColor="@color/blue"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/materialCard"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <include
-                android:id="@+id/inc_3"
-                layout="@layout/register_bottom_nav_card_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                bind:data="@{data}" />
-        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

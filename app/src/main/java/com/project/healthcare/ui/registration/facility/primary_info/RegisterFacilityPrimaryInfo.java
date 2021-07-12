@@ -57,7 +57,41 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         prepareCitySpinner();
         attachListeners();
         addTextWatchers();
+        setEditTextData();
         return binding.getRoot();
+    }
+
+    private void setEditTextData() {
+        binding.dateOfEstablishment.editText.setText(viewModel.getHealthFacility().getEstablishmentDate());
+        binding.name.editText.setText(viewModel.getHealthFacility().getName());
+        binding.password.editText.setText(viewModel.getHealthFacility().getPassword());
+        binding.pinCode.editText.setText(viewModel.getHealthFacility().getPinCode());
+        binding.address.editText.setText(viewModel.getHealthFacility().getAddress());
+        int statePos = -1;
+        for (Map.Entry<String, ArrayList<String>> e : viewModel.getStatesAndCities().entrySet()) {
+            statePos++;
+            if (e.getKey().contains(viewModel.getHealthFacility().getState())) break;
+        }
+        if (statePos > -1) {
+            binding.spinnerState.setSelection(statePos, true);
+            prepareCitySpinner();
+        }
+        int cityPos = 0;
+        for (; cityPos < viewModel.getStatesAndCities().get(viewModel.getHealthFacility().getState()).size(); cityPos++) {
+            if (viewModel.getStatesAndCities().get(viewModel.getHealthFacility().getState()).get(cityPos).contains(viewModel.getHealthFacility().getCity()))
+                break;
+        }
+        cityPos--;
+        if (cityPos > -1)
+            binding.spinnerCity.setSelection(cityPos, true);
+        binding.email.editText.setText(viewModel.getHealthFacility().getEmails().get(0));
+        for (int i = 1; i < viewModel.getHealthFacility().getEmails().size(); i++) {
+            addEmailTextBoxes();
+        }
+        binding.phone.editText.setText(viewModel.getHealthFacility().getPhoneNumbers().get(0));
+        for (int i = 1; i < viewModel.getHealthFacility().getPhoneNumbers().size(); i++) {
+            addPhoneTextBoxes();
+        }
     }
 
     private void prepareStateSpinner() {
@@ -120,7 +154,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         });
 
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
-            if (viewModel.getHealthFacility().getCompletedStages() > 0 || true) {
+            if (viewModel.getHealthFacility().getCompletedStages() > 0) {
                 if (viewModel.getHealthFacility().getCompletedStages() < 1)
                     viewModel.getHealthFacility().setCompletedStages(1);
                 viewModel.getSelectedBottomNumber().setValue(2);
@@ -128,14 +162,19 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         });
 
         //Add More Emails
-        binding.btnAddEmails.setOnClickListener(v -> addEmailTextBoxes());
+        binding.btnAddEmails.setOnClickListener(v -> {
+            viewModel.getHealthFacility().getEmails().add("");
+            addEmailTextBoxes();
+        });
 
         //Add More Phone numbers
-        binding.btnAddPhone.setOnClickListener(v -> addPhoneTextBoxes());
+        binding.btnAddPhone.setOnClickListener(v -> {
+            viewModel.getHealthFacility().getPhoneNumbers().add("");
+            addPhoneTextBoxes();
+        });
     }
 
     private void addPhoneTextBoxes() {
-        viewModel.getHealthFacility().getPhoneNumbers().add("");
         final int tag = viewModel.getHealthFacility().getPhoneNumbers().size() - 1;
         LinearLayout.LayoutParams lp;
         lp = new LinearLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_CONSTRAINT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -182,11 +221,10 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             }
         });
         binding.phoneLinearLayout.addView(ll);
-        ed.setText("");
+        ed.setText(viewModel.getHealthFacility().getPhoneNumbers().get(tag));
     }
 
     private void addEmailTextBoxes() {
-        viewModel.getHealthFacility().getEmails().add("");
         final int tag = viewModel.getHealthFacility().getEmails().size() - 1;
         LinearLayout.LayoutParams lp;
         lp = new LinearLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_CONSTRAINT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -233,7 +271,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             }
         });
         binding.emailsLinearLayout.addView(ll);
-        ed.setText("");
+        ed.setText(viewModel.getHealthFacility().getEmails().get(tag));
     }
 
     private void addTextWatchers() {

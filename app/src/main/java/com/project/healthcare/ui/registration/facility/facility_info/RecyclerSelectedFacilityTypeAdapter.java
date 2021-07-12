@@ -16,13 +16,14 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 
-public class RecyclerSelectedTypeAdapter extends RecyclerView.Adapter<RecyclerSelectedTypeAdapter.ViewHolder> {
-    private final ArrayList<FacilityType> list = new ArrayList<>();
+public class RecyclerSelectedFacilityTypeAdapter extends RecyclerView.Adapter<RecyclerSelectedFacilityTypeAdapter.ViewHolder> {
+    private final ArrayList<FacilityType> list;
 
     private final FacilityRemovedNotifier notifier;
 
-    public RecyclerSelectedTypeAdapter(FacilityRemovedNotifier notifier) {
+    public RecyclerSelectedFacilityTypeAdapter(FacilityRemovedNotifier notifier, ArrayList<FacilityType> list) {
         this.notifier = notifier;
+        this.list = new ArrayList<>(list);
     }
 
     @NonNull
