@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             @ColorInt int color = getColor(R.color.transparent_white);
             @ColorInt int colorLight = getColor(R.color.light_blue);
+            Log.d(TAG, "addObservers: case 3 : stages " + viewModel.getHealthFacility().getCompletedStages());
             switch (integer) {
                 case 1:
                     if (navController.getCurrentDestination().getId() != R.id.recyclerFacilityList) {
@@ -84,23 +85,25 @@ public class MainActivity extends AppCompatActivity {
                         setValuesInc3(lps, colorLight, smallSize);
                     }
 
+
                     break;
                 case 2:
-                    if (viewModel.getHealthFacility().getCompletedStages() > 0) {
+                    if (viewModel.getHealthFacility().getCompletedStages() >= 1) {
                         if (navController.getCurrentDestination().getId() != R.id.facilityInfo) {
                             navController.navigate(R.id.facilityInfo);
                             navController.popBackStack(R.id.facilityInfo, false);
                         }
-                        Log.d(TAG, "addObservers: Here inside 1 st stage completed ");
+
                         setBottomNavCardsToDefault();
                         setValuesInc2(lp, color, size);
 
-                        if (viewModel.getHealthFacility().getCompletedStages() < 3) {
+                        if (viewModel.getHealthFacility().getCompletedStages() < 2) {
                             setValuesInc3(lps, colorLight, smallSize);
                         }
                     }
                     break;
                 case 3:
+
                     if (viewModel.getHealthFacility().getCompletedStages() > 1) {
                         if (navController.getCurrentDestination().getId() != R.id.serviceInfo) {
                             navController.navigate(R.id.serviceInfo);

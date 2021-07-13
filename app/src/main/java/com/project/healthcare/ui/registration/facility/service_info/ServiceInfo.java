@@ -1,9 +1,13 @@
 package com.project.healthcare.ui.registration.facility.service_info;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,6 +16,7 @@ import com.project.healthcare.R;
 import com.project.healthcare.data.SpecialityType;
 import com.project.healthcare.databinding.FragmentServiceInfoBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
+import com.project.healthcare.ui.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,13 +46,80 @@ public class ServiceInfo extends Fragment implements Observer {
         specialityAddedNotifier.addObserver(this);
         attachAdapters();
         attachListeners();
+        addTextWatchers();
+        setData();
         return binding.getRoot();
+    }
+
+    private void addTextWatchers() {
+        binding.about.editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String ss = s.toString();
+                viewModel.getHealthFacility().setAbout(ss);
+                validateAll();
+                if (ss.length() > 10 || ss.isEmpty())
+                    binding.about.txtError.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private boolean validateAll() {
+        boolean success = true;
+        if (viewModel.getHealthFacility().getAbout().length() < 10) {
+            success = false;
+            binding.about.txtError.setVisibility(View.VISIBLE);
+            binding.about.txtError.setText("Please tell us a little bit more about establishment");
+            if (binding.about.editText.getText().toString().isEmpty())
+                binding.about.txtError.setVisibility(View.GONE);
+        } else if (!checkSpecialityType()) {
+            success = false;
+        }
+        if (success) {
+            if (viewModel.getHealthFacility().getCompletedStages() < 3)
+                viewModel.getHealthFacility().setCompletedStages(3);
+            binding.cardRegister.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
+        } else {
+            viewModel.getHealthFacility().setCompletedStages(2);
+            binding.cardRegister.setCardBackgroundColor(requireActivity().getColor(R.color.light_blue));
+        }
+        return success;
+    }
+
+
+    private boolean checkSpecialityType() {
+        return !viewModel.getHealthFacility().getSpecialities().isEmpty();
+    }
+
+
+    private void setData() {
+        binding.about.editText.setText(viewModel.getHealthFacility().getAbout());
+
     }
 
     private void attachListeners() {
         binding.incMoveLeft.cardMoveLeft.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
         binding.incMoveLeft.btnMoveLeft.setOnClickListener(v -> {
             viewModel.getSelectedBottomNumber().setValue(2);
+        });
+
+        binding.cardRegister.setOnClickListener(v -> {
+            if (validateAll()) {
+                Toast.makeText(requireContext(), "You have been registered successfully!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(requireActivity(), LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
         });
     }
 
@@ -76,7 +148,7 @@ public class ServiceInfo extends Fragment implements Observer {
         if (o instanceof RecyclerTypeOfSpecialityAdapter.SpecialityAddedNotifier) {
             selectedSpecialityTypeAdapter.getList().add((SpecialityType) arg);
             selectedSpecialityTypeAdapter.notifyDataSetChanged();
-            typeOfSpecialityAdapter.getList().remove((SpecialityType) arg);
+            typeOfSpecialityAdapter.getList().remove(arg);
             typeOfSpecialityAdapter.notifyDataSetChanged();
             viewModel.getHealthFacility().getSpecialities().add((SpecialityType) arg);
         }
@@ -85,9 +157,10 @@ public class ServiceInfo extends Fragment implements Observer {
         if (o instanceof RecyclerSelectedSpecialityTypeAdapter.SpecialityRemovedNotifier) {
             typeOfSpecialityAdapter.getList().add((SpecialityType) arg);
             typeOfSpecialityAdapter.notifyDataSetChanged();
-            selectedSpecialityTypeAdapter.getList().remove((SpecialityType) arg);
+            selectedSpecialityTypeAdapter.getList().remove(arg);
             selectedSpecialityTypeAdapter.notifyDataSetChanged();
-            viewModel.getHealthFacility().getSpecialities().remove((SpecialityType) arg);
+            viewModel.getHealthFacility().getSpecialities().remove(arg);
         }
+        validateAll();
     }
 }

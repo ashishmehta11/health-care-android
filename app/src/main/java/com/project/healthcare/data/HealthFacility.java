@@ -3,7 +3,7 @@ package com.project.healthcare.data;
 import java.util.ArrayList;
 
 public class HealthFacility {
-    private String name = "", address = "", state = "Andhra Pradesh", city = "", pinCode = "", password = "", establishmentDate = "", managedByName = "", avgPrice = "";
+    private String name = "", address = "", state = "Andhra Pradesh", city = "", pinCode = "", password = "", establishmentDate = "", managedByName = "", avgPrice = "", about = "";
     private ManagedBy managedBy;
     private ArrayList<String> phoneNumbers = new ArrayList<>();
     private ArrayList<String> emails = new ArrayList<>();
@@ -144,5 +144,13 @@ public class HealthFacility {
 
     public void setAvgPrice(String avgPrice) {
         this.avgPrice = avgPrice;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 }

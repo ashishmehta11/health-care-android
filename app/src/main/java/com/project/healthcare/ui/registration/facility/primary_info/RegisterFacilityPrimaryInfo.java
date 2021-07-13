@@ -55,9 +55,9 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         viewModel.getBaseData().setTitleBarName("Primary Info");
         prepareStateSpinner();
         prepareCitySpinner();
+        setEditTextData();
         attachListeners();
         addTextWatchers();
-        setEditTextData();
         return binding.getRoot();
     }
 
@@ -139,7 +139,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
 
     private void attachListeners() {
         final Calendar newCalendar = Calendar.getInstance();
-        final DatePickerDialog startTime = new DatePickerDialog(requireActivity(), (DatePickerDialog.OnDateSetListener) (view, year, monthOfYear, dayOfMonth) -> {
+        final DatePickerDialog startTime = new DatePickerDialog(requireActivity(), (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             binding.dateOfEstablishment.editText.setText(dayOfMonth + "-" + monthOfYear + "-" + year);
@@ -154,7 +154,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         });
 
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
-            if (viewModel.getHealthFacility().getCompletedStages() > 0 || true) {
+            if (viewModel.getHealthFacility().getCompletedStages() > 0) {
                 if (viewModel.getHealthFacility().getCompletedStages() < 1)
                     viewModel.getHealthFacility().setCompletedStages(1);
                 viewModel.getSelectedBottomNumber().setValue(2);
@@ -398,9 +398,10 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         if (viewModel.getHealthFacility().getEstablishmentDate().isEmpty())
             success = false;
 
-        if (success)
-            viewModel.getHealthFacility().setCompletedStages(1);
-        else
+        if (success) {
+            if (viewModel.getHealthFacility().getCompletedStages() < 1)
+                viewModel.getHealthFacility().setCompletedStages(1);
+        } else
             viewModel.getHealthFacility().setCompletedStages(0);
         return success;
     }

@@ -100,7 +100,7 @@ public class FacilityInfo extends Fragment implements Observer {
                 String ss = s.toString();
                 viewModel.getHealthFacility().setManagedByName(ss);
                 validateAll();
-                if (ss.isEmpty())
+                if (checkManagedByName() || ss.isEmpty())
                     binding.managedByName.txtError.setVisibility(View.GONE);
             }
         });
@@ -121,7 +121,7 @@ public class FacilityInfo extends Fragment implements Observer {
                 String ss = s.toString();
                 viewModel.getHealthFacility().setAvgPrice(ss);
                 validateAll();
-                if (ss.isEmpty())
+                if (checkPrice() || ss.isEmpty())
                     binding.avgFees.txtError.setVisibility(View.GONE);
             }
         });
@@ -147,14 +147,16 @@ public class FacilityInfo extends Fragment implements Observer {
             binding.avgFees.txtError.setText("Enter proper details");
             if (binding.avgFees.editText.getText().toString().isEmpty())
                 binding.avgFees.txtError.setVisibility(View.GONE);
-        } else if (!checkManagedByName()) {
+        }
+        if (!checkManagedByName()) {
             success = false;
             binding.managedByName.txtError.setVisibility(View.VISIBLE);
             binding.managedByName.txtError.setText("Enter proper details");
             if (binding.managedByName.editText.getText().toString().isEmpty())
                 binding.managedByName.txtError.setVisibility(View.GONE);
 
-        } else if (!checkFacilityType()) {
+        }
+        if (!checkFacilityType()) {
             success = false;
         }
         if (success) {
@@ -172,7 +174,7 @@ public class FacilityInfo extends Fragment implements Observer {
         binding.incMoveLeft.cardMoveLeft.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
         binding.incMoveLeft.btnMoveLeft.setOnClickListener(v -> viewModel.getSelectedBottomNumber().setValue(1));
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
-            if (validateAll() || true) {
+            if (validateAll()) {
                 if (viewModel.getHealthFacility().getCompletedStages() < 2)
                     viewModel.getHealthFacility().setCompletedStages(2);
                 viewModel.getSelectedBottomNumber().setValue(3);
@@ -232,7 +234,7 @@ public class FacilityInfo extends Fragment implements Observer {
             Log.d(TAG, "update: arg : " + FacilityType.toString((FacilityType) arg));
             selectedFacilityTypeAdapter.getList().add((FacilityType) arg);
             selectedFacilityTypeAdapter.notifyDataSetChanged();
-            typeOfFacilityAdapter.getList().remove((FacilityType) arg);
+            typeOfFacilityAdapter.getList().remove(arg);
             typeOfFacilityAdapter.notifyDataSetChanged();
             viewModel.getHealthFacility().getTypeOfFacility().add((FacilityType) arg);
         }
@@ -241,9 +243,9 @@ public class FacilityInfo extends Fragment implements Observer {
         if (o instanceof RecyclerSelectedFacilityTypeAdapter.FacilityRemovedNotifier) {
             typeOfFacilityAdapter.getList().add((FacilityType) arg);
             typeOfFacilityAdapter.notifyDataSetChanged();
-            selectedFacilityTypeAdapter.getList().remove((FacilityType) arg);
+            selectedFacilityTypeAdapter.getList().remove(arg);
             selectedFacilityTypeAdapter.notifyDataSetChanged();
-            viewModel.getHealthFacility().getTypeOfFacility().remove((FacilityType) arg);
+            viewModel.getHealthFacility().getTypeOfFacility().remove(arg);
         }
 
         validateAll();
