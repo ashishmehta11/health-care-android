@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (getIntent().hasExtra("facility")) {
             viewModel.getSelectedBottomNumber().setValue(1);
         }
+
+        //ApiCalls.getInstance().getFacilitiesByCity();
         //else
         // attachFragment(HomeFragment.class);
     }

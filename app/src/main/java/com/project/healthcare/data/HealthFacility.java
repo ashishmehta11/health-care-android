@@ -1,5 +1,9 @@
 package com.project.healthcare.data;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class HealthFacility {
@@ -152,5 +156,26 @@ public class HealthFacility {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    public static HealthFacility fromJson(JsonObject data) throws JSONException {
+        HealthFacility hf = new HealthFacility();
+        hf.setName(data.get("name").getAsString());
+        hf.getEmails().set(0, data.get("user").getAsString());
+        String[] emails = data.get("emails").getAsString().split(";");
+        for (String email : emails) {
+            hf.getEmails().add(email);
+        }
+        String[] phoneNumbers = data.get("contact_numbers").getAsString().split(";");
+        hf.getPhoneNumbers().clear();
+        for (String phone : phoneNumbers) {
+            hf.getPhoneNumbers().add(phone);
+        }
+        hf.setAddress(data.get("address").getAsString());
+        hf.setAbout(data.get("about").getAsString());
+        hf.setCity(data.get("city").getAsString());
+        hf.setState(data.get("state").getAsString());
+        hf.setPinCode(data.get("pin_code").getAsString());
+        return hf;
     }
 }

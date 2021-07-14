@@ -171,6 +171,7 @@
 
                     <include
                         android:id="@+id/navMenuCovid"
+                        android:visibility="gone"
                         layout="@layout/nav_menu_card_covid"
                         bind:data="@{data}" />
 

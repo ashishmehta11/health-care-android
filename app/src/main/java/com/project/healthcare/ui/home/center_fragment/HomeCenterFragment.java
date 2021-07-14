@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
+import com.project.healthcare.api.ApiCalls;
+import com.project.healthcare.data.HealthFacility;
 import com.project.healthcare.databinding.FragmentHomeCenterBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
 
@@ -29,36 +31,48 @@ public class HomeCenterFragment extends Fragment implements Observer {
     RecyclerCitiesAdapter recyclerCitiesAdapter;
     RecyclerFacilityListAdapter recyclerFacilityListAdapter;
     ArrayAdapter<CharSequence> statesAdapter;
+    RecyclerCitiesAdapter.SelectedCityNotifier notifierObj = new RecyclerCitiesAdapter.SelectedCityNotifier();
     private static final String TAG = "HomeCenterFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        notifierObj.addObserver(this);
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_center, container, false);
+            binding.setData(viewModel.getBaseData());
         }
         prepareSpinner();
         prepareRecyclerCities(viewModel.getStatesAndCities().get(viewModel.getSelectedCity().getValue()));
-        prepareRecyclerFacilityList();
+        prepareRecyclerFacilityList(viewModel.getCurrentShowingList());
         attachObservers();
+        ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
+        viewModel.getBaseData().setHomeProgressWheelVisibility(View.VISIBLE);
+        viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
+        ApiCalls.getInstance().addObserver(this);
         return binding.getRoot();
     }
 
-    private void prepareRecyclerFacilityList() {
-        recyclerFacilityListAdapter = new RecyclerFacilityListAdapter();
+    private void prepareRecyclerFacilityList(ArrayList<HealthFacility> l) {
+        recyclerFacilityListAdapter = new RecyclerFacilityListAdapter(l);
         binding.recyclerFacilityList.setAdapter(recyclerFacilityListAdapter);
     }
 
     private void attachObservers() {
         viewModel.getSelectedState().observe(getViewLifecycleOwner(), s -> {
             viewModel.reSetSelectedCity();
+            ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
+            viewModel.getBaseData().setHomeProgressWheelVisibility(View.VISIBLE);
+            viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
             prepareRecyclerCities(viewModel.getStatesAndCities().get(s));
         });
+
+
     }
 
     private void prepareRecyclerCities(List<String> list) {
-        recyclerCitiesAdapter = new RecyclerCitiesAdapter(list, viewModel.getSelectedCity().getValue());
+        recyclerCitiesAdapter = new RecyclerCitiesAdapter(list, viewModel.getSelectedCity().getValue(), notifierObj);
         binding.recyclerCities.setAdapter(recyclerCitiesAdapter);
     }
 
@@ -89,9 +103,35 @@ public class HomeCenterFragment extends Fragment implements Observer {
     }
 
     @Override
+    public void onDestroyView() {
+        ApiCalls.getInstance().deleteObserver(this);
+        super.onDestroyView();
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
-        if(o instanceof RecyclerCitiesAdapter.SelectedCityNotifier){
+        if (o instanceof RecyclerCitiesAdapter.SelectedCityNotifier) {
             viewModel.setSelectedCity(arg.toString());
+            Log.d(TAG, "update: here");
+            ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
+        }
+        if (o instanceof ApiCalls) {
+            ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
+            switch (objs.getCallId()) {
+                case 1:
+                    if (objs.isSuccess()) {
+                        ArrayList<HealthFacility> healthFacilities = (ArrayList<HealthFacility>) objs.getData();
+                        viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
+                        if (healthFacilities.isEmpty())
+                            viewModel.getBaseData().setLblHomeNoDataVisibility(View.VISIBLE);
+                        else
+                            viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
+                        prepareRecyclerFacilityList(healthFacilities);
+                    } else {
+
+                    }
+                    break;
+            }
         }
     }
 }

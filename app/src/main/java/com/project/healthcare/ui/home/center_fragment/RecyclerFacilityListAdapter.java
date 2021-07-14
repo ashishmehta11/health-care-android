@@ -9,9 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.healthcare.R;
 import com.project.healthcare.data.FacilityListItem;
+import com.project.healthcare.data.HealthFacility;
 import com.project.healthcare.databinding.RecyclerFacilityListItemBinding;
 
+import java.util.ArrayList;
+
 public class RecyclerFacilityListAdapter extends RecyclerView.Adapter<RecyclerFacilityListAdapter.ViewHolder> {
+
+    private final ArrayList<HealthFacility> list;
+
+    public RecyclerFacilityListAdapter(ArrayList<HealthFacility> list) {
+        this.list = list;
+    }
 
     @NonNull
     @Override

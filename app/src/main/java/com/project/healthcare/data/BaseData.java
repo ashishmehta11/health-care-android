@@ -21,9 +21,8 @@ public class BaseData extends BaseObservable {
     private ColorStateList profile;
 
 
-
     private int floatingMenuBtnVisibility = View.GONE, registerBottomNavVisibility = View.GONE;
-
+    private int lblHomeNoDataVisibility = View.GONE, homeProgressWheelVisibility = View.VISIBLE;
 
     public BaseData(ColorStateList blue, ColorStateList transparentWhite) {
         this.blue = blue;
@@ -144,4 +143,23 @@ public class BaseData extends BaseObservable {
         notifyPropertyChanged(BR.registerBottomNavVisibility);
     }
 
+    @Bindable
+    public int getLblHomeNoDataVisibility() {
+        return lblHomeNoDataVisibility;
+    }
+
+    public void setLblHomeNoDataVisibility(int lblHomeNoDataVisibility) {
+        this.lblHomeNoDataVisibility = lblHomeNoDataVisibility;
+        notifyPropertyChanged(BR.lblHomeNoDataVisibility);
+    }
+
+    @Bindable
+    public int getHomeProgressWheelVisibility() {
+        return homeProgressWheelVisibility;
+    }
+
+    public void setHomeProgressWheelVisibility(int homeProgressWheelVisibility) {
+        this.homeProgressWheelVisibility = homeProgressWheelVisibility;
+        notifyPropertyChanged(BR.homeProgressWheelVisibility);
+    }
 }

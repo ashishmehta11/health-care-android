@@ -18,12 +18,13 @@ import java.util.Observable;
 public class RecyclerCitiesAdapter extends RecyclerView.Adapter<RecyclerCitiesAdapter.ViewHolder>{
 
     List<String> cities;
-    SelectedCityNotifier notObj = new SelectedCityNotifier();
-    String selectedCity ;
+    SelectedCityNotifier notObj;
+    String selectedCity;
 
-    public RecyclerCitiesAdapter(List<String> cities, String selectedCity) {
+    public RecyclerCitiesAdapter(List<String> cities, String selectedCity, SelectedCityNotifier notObj) {
         this.cities = cities;
         this.selectedCity = selectedCity;
+        this.notObj = notObj;
     }
 
     @NonNull
@@ -79,8 +80,9 @@ public class RecyclerCitiesAdapter extends RecyclerView.Adapter<RecyclerCitiesAd
     }
 
    public static class SelectedCityNotifier extends Observable{
-        public void notifyCityChanged(String city){
-           notifyObservers(city);
+        public void notifyCityChanged(String city) {
+            setChanged();
+            notifyObservers(city);
         }
     }
 }
