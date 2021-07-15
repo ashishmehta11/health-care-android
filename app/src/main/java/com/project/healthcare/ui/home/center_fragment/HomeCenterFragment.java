@@ -117,18 +117,20 @@ public class HomeCenterFragment extends Fragment implements Observer {
         }
         if (o instanceof ApiCalls) {
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
+            viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
             switch (objs.getCallId()) {
                 case 1:
                     if (objs.isSuccess()) {
                         ArrayList<HealthFacility> healthFacilities = (ArrayList<HealthFacility>) objs.getData();
-                        viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
+                        viewModel.setCurrentShowingList(healthFacilities);
                         if (healthFacilities.isEmpty())
                             viewModel.getBaseData().setLblHomeNoDataVisibility(View.VISIBLE);
                         else
                             viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
+                        Log.d(TAG, "update: inside case 1 : objs.scueess");
                         prepareRecyclerFacilityList(healthFacilities);
                     } else {
-
+                        viewModel.getBaseData().setLblHomeNoDataVisibility(View.VISIBLE);
                     }
                     break;
             }

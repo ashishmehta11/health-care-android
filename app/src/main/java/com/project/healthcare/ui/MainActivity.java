@@ -188,11 +188,14 @@ public class MainActivity extends AppCompatActivity {
                     binding.cardMenu.setVisibility(View.GONE);
                     binding.includeBottomNav.btnMenu.setVisibility(View.INVISIBLE);
                 } else {
-                    if (Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.registerFacilityPrimaryInfo ||
-                            Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.facilityInfo ||
-                            Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.serviceInfo)
+                    if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.registerFacilityPrimaryInfo ||
+                            Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.facilityInfo ||
+                            Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.serviceInfo) {
+                        binding.cardMenu.setVisibility(View.GONE);
+                        binding.includeBottomNav.btnMenu.setVisibility(View.VISIBLE);
+                    } else {
                         binding.cardMenu.setVisibility(View.VISIBLE);
-                    binding.includeBottomNav.btnMenu.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });

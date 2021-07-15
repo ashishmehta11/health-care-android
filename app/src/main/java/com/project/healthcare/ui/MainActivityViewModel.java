@@ -25,7 +25,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final MutableLiveData<Integer> selectedBottomNumber;
     private final Application application;
     private final HealthFacility healthFacility = new HealthFacility();
-    private final ArrayList<HealthFacility> currentShowingList = new ArrayList<>();
+    private ArrayList<HealthFacility> currentShowingList = new ArrayList<>();
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
@@ -86,6 +86,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public ArrayList<HealthFacility> getCurrentShowingList() {
         return currentShowingList;
+    }
+
+    public void setCurrentShowingList(ArrayList<HealthFacility> currentShowingList) {
+        this.currentShowingList = currentShowingList;
     }
 }
 

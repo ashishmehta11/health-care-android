@@ -128,7 +128,7 @@ public class FacilityInfo extends Fragment implements Observer {
     }
 
     private boolean checkFacilityType() {
-        return !viewModel.getHealthFacility().getTypeOfFacility().isEmpty();
+        return !viewModel.getHealthFacility().getAffiliations().isEmpty();
     }
 
     private boolean checkManagedByName() {
@@ -187,7 +187,7 @@ public class FacilityInfo extends Fragment implements Observer {
         ArrayList<FacilityType> type = new ArrayList<>();
         for (FacilityType ft : facType) {
             boolean has = false;
-            for (FacilityType f : viewModel.getHealthFacility().getTypeOfFacility()) {
+            for (FacilityType f : viewModel.getHealthFacility().getAffiliations()) {
                 if (ft == f) {
                     has = true;
                     break;
@@ -196,7 +196,7 @@ public class FacilityInfo extends Fragment implements Observer {
             if (!has)
                 type.add(ft);
         }
-        selectedFacilityTypeAdapter = new RecyclerSelectedFacilityTypeAdapter(facilityTypeRemovedNotifier, viewModel.getHealthFacility().getTypeOfFacility());
+        selectedFacilityTypeAdapter = new RecyclerSelectedFacilityTypeAdapter(facilityTypeRemovedNotifier, viewModel.getHealthFacility().getAffiliations());
         typeOfFacilityAdapter = new RecyclerTypeOfFacilityAdapter(type, facilityTypeAddedNotifier);
         binding.recyclerRegSelectedFacilityTypes.setAdapter(selectedFacilityTypeAdapter);
         binding.recyclerRegTypeOfFacility.setAdapter(typeOfFacilityAdapter);
@@ -236,7 +236,7 @@ public class FacilityInfo extends Fragment implements Observer {
             selectedFacilityTypeAdapter.notifyDataSetChanged();
             typeOfFacilityAdapter.getList().remove(arg);
             typeOfFacilityAdapter.notifyDataSetChanged();
-            viewModel.getHealthFacility().getTypeOfFacility().add((FacilityType) arg);
+            viewModel.getHealthFacility().getAffiliations().add((FacilityType) arg);
         }
 
         //Facility Type removed
@@ -245,7 +245,7 @@ public class FacilityInfo extends Fragment implements Observer {
             typeOfFacilityAdapter.notifyDataSetChanged();
             selectedFacilityTypeAdapter.getList().remove(arg);
             selectedFacilityTypeAdapter.notifyDataSetChanged();
-            viewModel.getHealthFacility().getTypeOfFacility().remove(arg);
+            viewModel.getHealthFacility().getAffiliations().remove(arg);
         }
 
         validateAll();

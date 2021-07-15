@@ -6,8 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.project.healthcare.data.HealthFacility;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -28,28 +26,30 @@ public class ApiCalls extends Observable {
         state = state.replace(' ', '_');
         city = city.replace(' ', '_');
         Log.d(TAG, "facilities by state and city  called ");
-        Call<JsonArray> call = ApiCallingObject.getApiCallObject().getFacilities(state, city);
-        call.enqueue(new Callback<JsonArray>() {
+        Call<JsonObject> call = ApiCallingObject.getApiCallObject().getFacilities(state, city);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 parseFacilityListResponse(response);
             }
 
             @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(TAG, "facilities by state and city :onFailure: " + t.toString());
+                setChanged();
+                notifyObservers(new ApiCallReturnObjects(new ArrayList<HealthFacility>(), "Error", t.toString(), false, 1));
             }
         });
     }
 
-    private void parseFacilityListResponse(Response<JsonArray> response) {
+    private void parseFacilityListResponse(Response<JsonObject> response) {
         Log.d(TAG, "facilities by state and city :onResponse: " + response.toString());
         if (response.body() != null)
             Log.d(TAG, "facilities by state and city :onResponse: body:" + response.body().toString());
+        ArrayList<HealthFacility> list = new ArrayList<>();
         if (response.code() == 200) {
             try {
-                ArrayList<HealthFacility> list = new ArrayList<>();
-                JsonArray arr = response.body();
+                JsonArray arr = response.body().getAsJsonArray("facilities");
                 for (int i = 0; i < arr.size(); i++) {
                     JsonObject jObj = arr.get(i).getAsJsonObject();
                     HealthFacility hf = HealthFacility.fromJson(jObj);
@@ -57,9 +57,12 @@ public class ApiCalls extends Observable {
                 }
                 setChanged();
                 notifyObservers(new ApiCallReturnObjects(list, "", "", true, 1));
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            setChanged();
+            notifyObservers(new ApiCallReturnObjects(list, "Error", "Not found", false, 1));
         }
     }
     /*Log.d(TAG, "facilities by state and city :onResponse: " + response.toString());
