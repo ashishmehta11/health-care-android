@@ -1,5 +1,6 @@
 package com.project.healthcare.ui.registration.facility.service_info;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,10 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
+import com.project.healthcare.api.ApiCalls;
 import com.project.healthcare.data.SpecialityType;
 import com.project.healthcare.databinding.FragmentServiceInfoBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
 import com.project.healthcare.ui.login.LoginActivity;
+import com.project.healthcare.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +35,7 @@ public class ServiceInfo extends Fragment implements Observer {
     RecyclerTypeOfSpecialityAdapter typeOfSpecialityAdapter;
     RecyclerSelectedSpecialityTypeAdapter selectedSpecialityTypeAdapter;
     ArrayList<SpecialityType> facType = new ArrayList<>(Arrays.asList(SpecialityType.values()));
-
+    Dialog dialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,9 +44,11 @@ public class ServiceInfo extends Fragment implements Observer {
         if (binding == null) {
             binding = FragmentServiceInfoBinding.inflate(inflater, container, false);
         }
+        dialog = Utils.buildProgressDialog(requireContext());
         viewModel.getBaseData().setTitleBarName("Provided Services");
         specialityRemovedNotifier.addObserver(this);
         specialityAddedNotifier.addObserver(this);
+        ApiCalls.getInstance().addObserver(this);
         attachAdapters();
         attachListeners();
         addTextWatchers();
@@ -104,7 +109,6 @@ public class ServiceInfo extends Fragment implements Observer {
 
     private void setData() {
         binding.about.editText.setText(viewModel.getHealthFacility().getAbout());
-
     }
 
     private void attachListeners() {
@@ -115,10 +119,12 @@ public class ServiceInfo extends Fragment implements Observer {
 
         binding.cardRegister.setOnClickListener(v -> {
             if (validateAll()) {
-                Toast.makeText(requireContext(), "You have been registered successfully!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(requireActivity(), LoginActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                // call api
+//                Toast.makeText(requireContext(), "You have been registered successfully!", Toast.LENGTH_SHORT).show();
+//                Intent i = new Intent(requireActivity(), LoginActivity.class);
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
+                ApiCalls.getInstance().registerFacility(viewModel.getHealthFacility());
             }
         });
     }
@@ -151,6 +157,7 @@ public class ServiceInfo extends Fragment implements Observer {
             typeOfSpecialityAdapter.getList().remove(arg);
             typeOfSpecialityAdapter.notifyDataSetChanged();
             viewModel.getHealthFacility().getSpecialities().add((SpecialityType) arg);
+            validateAll();
         }
 
         //Speciality Type removed
@@ -160,7 +167,27 @@ public class ServiceInfo extends Fragment implements Observer {
             selectedSpecialityTypeAdapter.getList().remove(arg);
             selectedSpecialityTypeAdapter.notifyDataSetChanged();
             viewModel.getHealthFacility().getSpecialities().remove(arg);
+            validateAll();
         }
-        validateAll();
+
+        if (o instanceof ApiCalls) {
+            if (dialog.isShowing())
+                dialog.cancel();
+            ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
+            viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
+            switch (objs.getCallId()) {
+                case 2:
+                    if (objs.isSuccess()) {
+                        Toast.makeText(viewModel.getApplication().getApplicationContext(), "You have been registered successfully!", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(requireActivity(), LoginActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getFailureTitle() + " : -> " + objs.getFailureText(), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
+
     }
 }

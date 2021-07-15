@@ -88,6 +88,37 @@ public class ApiCalls extends Observable {
 
      */
 
+    public void registerFacility(HealthFacility facility) {
+        JsonObject data = HealthFacility.toJson(facility);
+        Log.d(TAG, "facility register calling api : data :" + data.toString());
+        Call<JsonObject> call = ApiCallingObject.getApiCallObject().registerFacility(data);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.d(TAG, "facility register :onResponse: " + response.toString());
+                if (response.body() != null)
+                    Log.d(TAG, "facility register :onResponse: body:" + response.body().toString());
+                if (response.code() == 200) {
+                    setChanged();
+                    notifyObservers(new ApiCallReturnObjects(null, "Success", "Registered Successfully", true, 2));
+                } else if (response.code() == 400) {
+                    setChanged();
+                    notifyObservers(new ApiCallReturnObjects(null, "Error", "Fill form correctly", false, 2));
+                } else {
+                    setChanged();
+                    notifyObservers(new ApiCallReturnObjects(null, "Error", response.message(), false, 2));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(TAG, "register facility :onFailure: " + t.toString());
+                setChanged();
+                notifyObservers(new ApiCallReturnObjects(null, "Error", t.toString(), false, 2));
+            }
+        });
+    }
+
     public static class ApiCallReturnObjects {
         private final Object data;
         private final String failureTitle;

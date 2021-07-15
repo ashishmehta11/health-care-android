@@ -1,7 +1,12 @@
 package com.project.healthcare.utils;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 
+import com.project.healthcare.R;
 import com.project.healthcare.ui.MainActivityViewModel;
 
 import org.json.JSONArray;
@@ -19,12 +24,10 @@ public class Utils {
     public Utils(Context context) {
         try {
             InputStream is = context.getAssets().open("list.json");
-
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-
             String jsonString = new String(buffer, StandardCharsets.UTF_8);
             JSONObject json = new JSONObject(jsonString);
             Iterator<?> keys = json.keys();
@@ -40,5 +43,17 @@ public class Utils {
         } catch (Exception ignore) {
 
         }
+    }
+
+    public static Dialog buildProgressDialog(Context context) {
+        Dialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_Dialog_Alert);
+        //DialogData dialogData = new DialogData("Registration", "OK");
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.progress_wheel, null, false);
+        //DialogRegistrationChoiceBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_registration_choice, null, false);
+        builder.setView(dialogView);
+        dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 }

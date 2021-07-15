@@ -1,5 +1,6 @@
 package com.project.healthcare.ui.home.center_fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.project.healthcare.api.ApiCalls;
 import com.project.healthcare.data.HealthFacility;
 import com.project.healthcare.databinding.FragmentHomeCenterBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
+import com.project.healthcare.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,9 @@ public class HomeCenterFragment extends Fragment implements Observer {
     ArrayAdapter<CharSequence> statesAdapter;
     RecyclerCitiesAdapter.SelectedCityNotifier notifierObj = new RecyclerCitiesAdapter.SelectedCityNotifier();
     private static final String TAG = "HomeCenterFragment";
+    Dialog dialog;
+    View dialogView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,12 +52,16 @@ public class HomeCenterFragment extends Fragment implements Observer {
         prepareRecyclerCities(viewModel.getStatesAndCities().get(viewModel.getSelectedCity().getValue()));
         prepareRecyclerFacilityList(viewModel.getCurrentShowingList());
         attachObservers();
+        dialog = Utils.buildProgressDialog(requireContext());
+        if (!dialog.isShowing())
+            dialog.show();
         ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
         viewModel.getBaseData().setHomeProgressWheelVisibility(View.VISIBLE);
         viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
         ApiCalls.getInstance().addObserver(this);
         return binding.getRoot();
     }
+
 
     private void prepareRecyclerFacilityList(ArrayList<HealthFacility> l) {
         recyclerFacilityListAdapter = new RecyclerFacilityListAdapter(l);
@@ -62,6 +71,8 @@ public class HomeCenterFragment extends Fragment implements Observer {
     private void attachObservers() {
         viewModel.getSelectedState().observe(getViewLifecycleOwner(), s -> {
             viewModel.reSetSelectedCity();
+            if (!dialog.isShowing())
+                dialog.show();
             ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
             viewModel.getBaseData().setHomeProgressWheelVisibility(View.VISIBLE);
             viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
@@ -105,6 +116,8 @@ public class HomeCenterFragment extends Fragment implements Observer {
     @Override
     public void onDestroyView() {
         ApiCalls.getInstance().deleteObserver(this);
+        if (dialog.isShowing())
+            dialog.cancel();
         super.onDestroyView();
     }
 
@@ -113,9 +126,13 @@ public class HomeCenterFragment extends Fragment implements Observer {
         if (o instanceof RecyclerCitiesAdapter.SelectedCityNotifier) {
             viewModel.setSelectedCity(arg.toString());
             Log.d(TAG, "update: here");
+            if (!dialog.isShowing())
+                dialog.show();
             ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
         }
         if (o instanceof ApiCalls) {
+            if (dialog.isShowing())
+                dialog.cancel();
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
             viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
             switch (objs.getCallId()) {
