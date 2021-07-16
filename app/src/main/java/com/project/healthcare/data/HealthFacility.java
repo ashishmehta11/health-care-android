@@ -13,32 +13,18 @@ public class HealthFacility {
     private String id = "";
     private String name = "", address = "", state = "Andhra Pradesh", city = "", pinCode = "", password = "", establishmentDate = "", managedByName = "", avgPrice = "", about = "";
     private ManagedBy managedBy;
-    private ArrayList<String> phoneNumbers = new ArrayList<>();
-    private ArrayList<String> emails = new ArrayList<>();
+    private final ArrayList<String> phoneNumbers = new ArrayList<>();
+    private final ArrayList<String> emails = new ArrayList<>();
     private int completedStages = 0;
-    private ArrayList<FacilityType> affiliations = new ArrayList<>();
-    private ArrayList<SpecialityType> specialities = new ArrayList<>();
-    private ArrayList<Object> services = new ArrayList<>();
+    private final ArrayList<FacilityType> affiliations = new ArrayList<>();
+    private final ArrayList<SpecialityType> specialities = new ArrayList<>();
+    private final ArrayList<Object> services = new ArrayList<>();
 
     public HealthFacility() {
         phoneNumbers.add("");
         emails.add("");
     }
 
-    public HealthFacility(String name, String address, String state, String city, String pinCode, String password, String establishmentDate, ArrayList<String> phoneNumbers, ArrayList<String> emails, ArrayList<FacilityType> typeOfFacility, ArrayList<SpecialityType> specialities, ArrayList<Object> services) {
-        this.name = name;
-        this.address = address;
-        this.state = state;
-        this.city = city;
-        this.pinCode = pinCode;
-        this.password = password;
-        this.establishmentDate = establishmentDate;
-        this.phoneNumbers = phoneNumbers;
-        this.emails = emails;
-        this.affiliations = typeOfFacility;
-        this.specialities = specialities;
-        this.services = services;
-    }
 
     public String getName() {
         return name;
@@ -118,49 +104,6 @@ public class HealthFacility {
         this.completedStages = completedStages;
     }
 
-    public static HealthFacility fromJson(JsonObject data) {
-        HealthFacility hf = new HealthFacility();
-        try {
-
-            hf.setId(data.get("id").getAsString());
-            hf.setName(data.get("name").getAsString());
-            hf.getEmails().set(0, data.get("user_name").getAsString());
-            try {
-                if (data.has("emails") && data.get("emails") != null && data.get("emails").getAsString() != null) {
-                    String[] emails = data.get("emails").getAsString().split(";");
-                    for (String email : emails) {
-                        hf.getEmails().add(email);
-                    }
-                }
-            } catch (Exception ignore) {
-
-            }
-            String[] phoneNumbers = data.get("contact_numbers").getAsString().split(";");
-            hf.getPhoneNumbers().clear();
-            for (String phone : phoneNumbers) {
-                hf.getPhoneNumbers().add(phone);
-            }
-            hf.setAddress(data.get("address").getAsString());
-            hf.setAbout(data.get("about").getAsString());
-            hf.setCity(data.get("city").getAsString());
-            hf.setState(data.get("state").getAsString());
-            hf.setPinCode(data.get("pin_code").getAsString());
-            hf.setAvgPrice(data.get("avg_fees").getAsString());
-            for (JsonElement s : data.get("affiliations").getAsJsonArray()) {
-                hf.getAffiliations().add(FacilityType.fromString(s.getAsString()));
-            }
-            JsonObject ownership = data.get("ownership").getAsJsonObject();
-            hf.setManagedBy(ManagedBy.fromString(ownership.get("id").getAsString()));
-            hf.setManagedByName(ownership.get("name").getAsString());
-            for (JsonElement s : data.get("speciality").getAsJsonArray()) {
-                hf.getSpecialities().add(SpecialityType.fromString(s.getAsString()));
-            }
-        } catch (Exception e) {
-            Log.d("HealthFacility", "fromJson: exception : " + Arrays.toString(e.getStackTrace()));
-            Log.d("HealthFacility", "fromJson: exception : " + e.toString());
-        }
-        return hf;
-    }
 
     public ArrayList<SpecialityType> getSpecialities() {
         return specialities;
@@ -223,7 +166,7 @@ public class HealthFacility {
         }
         json.addProperty("contact_numbers", num);
         num = "";
-        for (int i = 0; i < facility.getEmails().size(); i++) {
+        for (int i = 1; i < facility.getEmails().size(); i++) {
             if (i == facility.getEmails().size() - 1)
                 num += facility.getEmails().get(i);
             else {
@@ -231,7 +174,7 @@ public class HealthFacility {
             }
         }
         if (num.isEmpty())
-            num = "";
+            num = null;
         json.addProperty("emails", num);
         json.addProperty("avg_fees", facility.getAvgPrice());
         JsonArray arr = new JsonArray();
@@ -247,6 +190,54 @@ public class HealthFacility {
         return json;
     }
 
+    public static HealthFacility fromJson(JsonObject data) {
+        HealthFacility hf = new HealthFacility();
+        try {
+
+            hf.setId(data.get("id").getAsString());
+            hf.setName(data.get("name").getAsString());
+            hf.getEmails().set(0, data.get("user_name").getAsString());
+            try {
+                if (data.has("emails")
+                        && data.get("emails") != null
+                        && data.get("emails").getAsString() != null
+                        && !data.get("emails").getAsString().equalsIgnoreCase("None")
+                        && data.get("emails").getAsString().length() > 0) {
+                    String[] emails = data.get("emails").getAsString().split(";");
+                    for (int i = 1; i < emails.length; i++) {
+                        hf.getEmails().add(emails[i]);
+                    }
+                }
+            } catch (Exception ignore) {
+
+            }
+            String[] phoneNumbers = data.get("contact_numbers").getAsString().split(";");
+            hf.getPhoneNumbers().clear();
+            for (String phone : phoneNumbers) {
+                hf.getPhoneNumbers().add(phone);
+            }
+            hf.setAddress(data.get("address").getAsString());
+            hf.setAbout(data.get("about").getAsString());
+            hf.setCity(data.get("city").getAsString());
+            hf.setState(data.get("state").getAsString());
+            hf.setPinCode(data.get("pin_code").getAsString());
+            hf.setAvgPrice(data.get("avg_fees").getAsString());
+            for (JsonElement s : data.get("affiliations").getAsJsonArray()) {
+                hf.getAffiliations().add(FacilityType.fromString(s.getAsString()));
+            }
+            JsonObject ownership = data.get("ownership").getAsJsonObject();
+            hf.setManagedBy(ManagedBy.fromString(ownership.get("id").getAsString()));
+            hf.setManagedByName(ownership.get("name").getAsString());
+            for (JsonElement s : data.get("speciality").getAsJsonArray()) {
+                hf.getSpecialities().add(SpecialityType.fromString(s.getAsString()));
+            }
+        } catch (Exception e) {
+            Log.d("HealthFacility", "fromJson: exception : " + Arrays.toString(e.getStackTrace()));
+            Log.d("HealthFacility", "fromJson: exception : " + e.toString());
+        }
+        return hf;
+    }
+
     public ArrayList<FacilityType> getAffiliations() {
         return affiliations;
     }
@@ -258,4 +249,6 @@ public class HealthFacility {
     public void setId(String id) {
         this.id = id;
     }
+
+
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -55,10 +56,10 @@ public class HomeCenterFragment extends Fragment implements Observer {
         dialog = Utils.buildProgressDialog(requireContext());
         if (!dialog.isShowing())
             dialog.show();
+        ApiCalls.getInstance().addObserver(this);
         ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
         viewModel.getBaseData().setHomeProgressWheelVisibility(View.VISIBLE);
         viewModel.getBaseData().setLblHomeNoDataVisibility(View.GONE);
-        ApiCalls.getInstance().addObserver(this);
         return binding.getRoot();
     }
 
@@ -125,10 +126,6 @@ public class HomeCenterFragment extends Fragment implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof RecyclerCitiesAdapter.SelectedCityNotifier) {
             viewModel.setSelectedCity(arg.toString());
-            Log.d(TAG, "update: here");
-            if (!dialog.isShowing())
-                dialog.show();
-            ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
         }
         if (o instanceof ApiCalls) {
             if (dialog.isShowing())
@@ -148,6 +145,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
                         prepareRecyclerFacilityList(healthFacilities);
                     } else {
                         viewModel.getBaseData().setLblHomeNoDataVisibility(View.VISIBLE);
+                        Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getTitle() + "-> " + objs.getText(), Toast.LENGTH_SHORT).show();
                     }
                     break;
             }

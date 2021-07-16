@@ -125,6 +125,8 @@ public class ServiceInfo extends Fragment implements Observer {
 //                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                startActivity(i);
                 ApiCalls.getInstance().registerFacility(viewModel.getHealthFacility());
+                if (!dialog.isShowing())
+                    dialog.show();
             }
         });
     }
@@ -183,7 +185,7 @@ public class ServiceInfo extends Fragment implements Observer {
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                     } else {
-                        Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getFailureTitle() + " : -> " + objs.getFailureText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getTitle() + " : -> " + objs.getText(), Toast.LENGTH_SHORT).show();
                     }
                     break;
             }

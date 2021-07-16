@@ -37,7 +37,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
     FragmentRegisterFacilityPrimaryInfoBinding binding;
     MainActivityViewModel viewModel;
     private static final String TAG = "PrimaryInfo";
-    String emailRegex = "^[a-zA-Z0-9._@\\-]{2,}@[a-zA-Z0-9_]*[.][a-zA-Z.]+$";
+    String emailRegex = "^[a-zA-Z0-9._@\\-]{2,}@[a-zA-Z0-9_]*[.][a-zA-Z]+[a-zA-Z.]*$";
     String nameRegex = "^[a-zA-Z\\s]*$";
     String pinCodeRegex = "^[0-9]{6}$";
     String phoneNumberRegex = "^[0-9]{10}$";
@@ -455,7 +455,6 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             }
         }
         changeNamePerValidation(R.drawable.edit_text_bg, View.GONE, requireActivity().getColor(R.color.light_blue));
-
     }
 
     private void validateAddress(String ss) {

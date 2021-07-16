@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.project.healthcare.R;
 import com.project.healthcare.data.BaseData;
+import com.project.healthcare.data.Citizen;
 import com.project.healthcare.data.HealthFacility;
 import com.project.healthcare.utils.Utils;
 
@@ -24,8 +25,10 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final MutableLiveData<String> selectedCity;
     private final MutableLiveData<Integer> selectedBottomNumber;
     private final Application application;
-    private final HealthFacility healthFacility = new HealthFacility();
+    private HealthFacility healthFacility = new HealthFacility();
+    private Citizen citizen = new Citizen();
     private ArrayList<HealthFacility> currentShowingList = new ArrayList<>();
+
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
@@ -90,6 +93,18 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void setCurrentShowingList(ArrayList<HealthFacility> currentShowingList) {
         this.currentShowingList = currentShowingList;
+    }
+
+    public void setHealthFacility(HealthFacility healthFacility) {
+        this.healthFacility = healthFacility;
+    }
+
+    public Citizen getCitizen() {
+        return citizen;
+    }
+
+    public void setCitizen(Citizen citizen) {
+        this.citizen = citizen;
     }
 }
 

@@ -48,11 +48,6 @@
             tools:itemCount="5"
             tools:listitem="@layout/recycler_facility_list_item" />
 
-        <include
-            android:id="@+id/progressWheel"
-            layout="@layout/progress_wheel"
-            android:visibility="gone" />
-        <!--            android:visibility="@{data.homeProgressWheelVisibility}"-->
 
         <TextView
             android:id="@+id/lblNoData"

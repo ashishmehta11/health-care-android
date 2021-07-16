@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ApiCallingObject {
-    public final static String BASE_URL = "http://192.168.0.101:8000/api/";
+    public final static String BASE_URL = "http://192.168.158.19:8000/api/";
     private static Retrofit retrofit = new Retrofit.Builder()
             .client(new OkHttpClient().newBuilder().retryOnConnectionFailure(true).connectTimeout(180, TimeUnit.SECONDS)
                     .readTimeout(180, TimeUnit.SECONDS).build())
