@@ -14,24 +14,39 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
+import com.project.healthcare.api.ApiCalls;
+import com.project.healthcare.data.Citizen;
 import com.project.healthcare.data.DialogData;
+import com.project.healthcare.data.HealthFacility;
+import com.project.healthcare.database.Database;
 import com.project.healthcare.databinding.ActivityLoginBinding;
 import com.project.healthcare.databinding.DialogRegistrationChoiceBinding;
 import com.project.healthcare.ui.MainActivity;
 import com.project.healthcare.ui.otp.OtpActivity;
+import com.project.healthcare.utils.Utils;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements Observer {
     LoginActivityViewModel viewModel;
     ActivityLoginBinding binding;
     boolean isEmailCorrect = false, isPassCorrect = false, isPhone = false;
-    Dialog dialog;
+    private final static String TAG = "LoginActivity";
+    Dialog dialog, progressDialog;
+    Utils.GeneralDialog generalDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        generalDialog = new Utils.GeneralDialog();
+        generalDialog.buildGeneralDialog(LoginActivity.this, new DialogData(
+                "", "", "OK", "CANCEL", View.GONE));
+        progressDialog = Utils.buildProgressDialog(LoginActivity.this);
+        ApiCalls.getInstance().addObserver(this);
         attachListeners();
     }
 
@@ -49,12 +64,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        generalDialog.binding.footer.dialogBtnFooterPositive.setOnClickListener(v -> {
+            if (generalDialog.dialog.isShowing()) {
+                generalDialog.dialog.dismiss();
+            }
+        });
+
         addTextWatchers();
     }
 
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_Dialog_Alert);
-        DialogData dialogData = new DialogData("Registration", "OK");
+        DialogData dialogData = new DialogData("Registration", "", "OK", "", View.GONE);
         DialogRegistrationChoiceBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_registration_choice, null, false);
         binding.setData(dialogData);
         builder.setView(binding.getRoot());
@@ -87,7 +108,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin() {
         if (isEmailCorrect && isPassCorrect) {
-            navigateToOtp();
+
+            progressDialog.show();
+            ApiCalls.getInstance().login(binding.email.editText.getText().toString(),
+                    binding.incPass.editText.getText().toString());
         }
     }
 
@@ -95,11 +119,23 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         if (dialog != null && dialog.isShowing())
             dialog.cancel();
+//        if (generalDialog.dialog.isShowing())
+//            generalDialog.dialog.cancel();
+        if (progressDialog.isShowing())
+            progressDialog.cancel();
         super.onStop();
     }
 
-    private void navigateToOtp() {
-        startActivity(new Intent(this, OtpActivity.class));
+    @Override
+    protected void onDestroy() {
+        ApiCalls.getInstance().deleteObserver(this);
+        super.onDestroy();
+    }
+
+    private void navigateToOtp(String number) {
+        Intent i = new Intent(this, OtpActivity.class);
+        i.putExtra("phone_number", number);
+        startActivity(i);
     }
 
     private void addTextWatchers() {
@@ -117,10 +153,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() > 0) {
-                    String emailRegex = "^[a-zA-Z0-9._@\\-]{2,}@[a-zA-Z0-9_]*[.][a-zA-Z.]+$";
-                    String numberRegex = "^[0-9]{10}$";
-                    if (!Pattern.matches(emailRegex, s.toString())
-                            && !Pattern.matches(numberRegex, s.toString())) {
+                    String emailRegex = "^[a-zA-Z0-9._@\\-]{2,}@[a-zA-Z0-9_]*[.][a-zA-Z]+[a-zA-Z.]*$";
+                    if (!Pattern.matches(emailRegex, s.toString().trim())) {
                         setEmailIncorrect();
                         isPhone = false;
                     } else {
@@ -149,12 +183,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() <= 0) {
+                if (s.toString().trim().length() <= 0) {
                     setPasswordCorrect();
                     isPassCorrect = false;
                     setLoginBtnColor(R.color.light_blue);
                 } else {
-                    if (s.length() >= 6) {
+                    if (s.toString().trim().length() >= 6) {
                         setPasswordCorrect();
                     } else {
                         setPasswordIncorrect();
@@ -213,9 +247,39 @@ public class LoginActivity extends AppCompatActivity {
     private void setEmailIncorrect() {
         binding.email.editText.setBackground(AppCompatResources.getDrawable(getApplicationContext(), R.drawable.edit_text_bg_error));
         binding.email.txtError.setVisibility(View.VISIBLE);
-        binding.email.txtError.setText("Invalid Email/Phone no.");
+        binding.email.txtError.setText("Invalid Email.");
         setForgotPasswordColor(R.color.light_blue);
         isEmailCorrect = false;
         setLoginBtnColor(R.color.light_blue);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof ApiCalls) {
+            if (progressDialog.isShowing())
+                progressDialog.cancel();
+            ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
+            switch (objs.getCallId()) {
+                case 4:
+                    if (objs.isSuccess()) {
+                        Database db = new Database(getApplicationContext());
+                        db.insertUser(objs.getData());
+                        final String[] number = {"+91"};
+                        if (objs.getData() instanceof Citizen)
+                            number[0] += ((Citizen) objs.getData()).getPhoneNumber();
+                        else
+                            number[0] += ((HealthFacility) objs.getData()).getPhoneNumbers().get(0);
+                        navigateToOtp(number[0]);
+                    } else {
+                        generalDialog.binding.getData().setTitleString(objs.getTitle());
+                        generalDialog.binding.getData().setTextString(objs.getText());
+                        generalDialog.dialog.setOnDismissListener(dialog -> {
+                        });
+                        generalDialog.dialog.show();
+                        //Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getTitle() + " : -> " + objs.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
     }
 }

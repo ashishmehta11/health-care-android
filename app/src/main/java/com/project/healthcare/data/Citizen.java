@@ -10,21 +10,9 @@ public class Citizen extends BaseObservable {
     private String phoneNumber = "";
     private String password = "";
     private String token = "";
+    private String id = "";
 
-    public static Citizen fromJson(JsonObject data) {
-        Citizen citizen = new Citizen();
-        if (data.has("user_name"))
-            citizen.setUserName(data.get("user_name").getAsString());
-        if (data.has("name"))
-            citizen.setName(data.get("name").getAsString());
-        if (data.has("phone_number"))
-            citizen.setPhoneNumber(data.get("phone_number").getAsString());
-        if (data.has("password"))
-            citizen.setPassword(data.get("password").getAsString());
-        if (data.has("token"))
-            citizen.setToken(data.get("token").getAsString());
-        return citizen;
-    }
+
 
     public String getUserName() {
         return userName;
@@ -66,6 +54,27 @@ public class Citizen extends BaseObservable {
         this.token = token;
     }
 
+    public static Citizen fromJson(JsonObject data) {
+        Citizen citizen = new Citizen();
+        if (data.has("id"))
+            citizen.setId(data.get("id").getAsString());
+        if (data.has("user_name"))
+            citizen.setUserName(data.get("user_name").getAsString());
+        if (data.has("name"))
+            citizen.setName(data.get("name").getAsString());
+        if (data.has("phone_number"))
+            citizen.setPhoneNumber(data.get("phone_number").getAsString());
+        if (data.has("password"))
+            citizen.setPassword(data.get("password").getAsString());
+        if (data.has("token"))
+            citizen.setToken(data.get("token").getAsString());
+        return citizen;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public JsonObject toJson() {
         JsonObject data = new JsonObject();
         data.addProperty("user_name", getUserName());
@@ -73,5 +82,9 @@ public class Citizen extends BaseObservable {
         data.addProperty("password", getPassword());
         data.addProperty("phone_number", getPhoneNumber());
         return data;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

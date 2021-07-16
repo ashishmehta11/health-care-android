@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.project.healthcare.R;
+import com.project.healthcare.data.DialogData;
+import com.project.healthcare.databinding.DialogGeneralBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
 
 import org.json.JSONArray;
@@ -56,4 +58,23 @@ public class Utils {
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
+
+    public static class GeneralDialog {
+        public Dialog dialog;
+        public DialogGeneralBinding binding;
+
+        public void buildGeneralDialog(Context context, DialogData dialogData) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_Dialog_Alert);
+            binding = DialogGeneralBinding.inflate(LayoutInflater.from(context));
+            //DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_general, null, false);
+            binding.setData(dialogData);
+            builder.setView(binding.getRoot());
+            dialog = builder.create();
+            dialog.setCanceledOnTouchOutside(true);
+            binding.header.btnCloseDialog.setOnClickListener(v -> {
+                if (dialog.isShowing()) dialog.cancel();
+            });
+        }
+    }
+
 }

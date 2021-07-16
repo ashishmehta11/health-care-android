@@ -44,7 +44,7 @@ public class ServiceInfo extends Fragment implements Observer {
         if (binding == null) {
             binding = FragmentServiceInfoBinding.inflate(inflater, container, false);
         }
-        dialog = Utils.buildProgressDialog(requireContext());
+        dialog = Utils.buildProgressDialog(requireActivity());
         viewModel.getBaseData().setTitleBarName("Provided Services");
         specialityRemovedNotifier.addObserver(this);
         specialityAddedNotifier.addObserver(this);

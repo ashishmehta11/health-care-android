@@ -55,9 +55,7 @@ public class ApiCalls extends Observable {
     }
 
     private void parseFacilityListResponse(Response<JsonObject> response) {
-        Log.d(TAG, "facilities by state and city :onResponse: " + response.toString());
-        if (response.body() != null)
-            Log.d(TAG, "facilities by state and city :onResponse: body:" + response.body().toString());
+        printResponseLogs(response, "facilities by state and city :onResponse: ", "facilities by state and city :onResponse: body:", "facilities by state and city :onResponse:error body:");
         ArrayList<HealthFacility> list = new ArrayList<>();
         if (response.code() == 200) {
             try {
@@ -75,6 +73,15 @@ public class ApiCalls extends Observable {
         } else {
             setChanged();
             requestNotSuccessful(response, 1);
+        }
+    }
+
+    private void printResponseLogs(Response<JsonObject> response, String s, String s2, String s3) {
+        Log.d(TAG, s + response.toString());
+        if (response.body() != null)
+            Log.d(TAG, s2 + response.body().toString());
+        if (response.errorBody() != null) {
+            Log.d(TAG, s3 + response.errorBody().toString());
         }
     }
 
@@ -113,9 +120,7 @@ public class ApiCalls extends Observable {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.d(TAG, "facility register :onResponse: " + response.toString());
-                if (response.body() != null)
-                    Log.d(TAG, "facility register :onResponse: body:" + response.body().toString());
+                printResponseLogs(response, "facility register :onResponse: ", "facility register :onResponse: body:", "facility register :onResponse:error body:");
                 if (response.code() == 201) {
                     setChanged();
                     if (response.body() != null)
@@ -150,18 +155,13 @@ public class ApiCalls extends Observable {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.d(TAG, "facility citizen :onResponse: " + response.toString());
-                if (response.body() != null)
-                    Log.d(TAG, "facility citizen :onResponse: body:" + response.body().toString());
-                if (response.errorBody() != null) {
-                    Log.d(TAG, "facility citizen :onResponse:error body:" + response.errorBody().toString());
-                    if (response.code() == 201) {
-                        setChanged();
-                        notifyObservers(new ApiCallReturnObjects(null, "Success", response.body().get("success").getAsString(), false, callId));
-                    } else {
-                        setChanged();
-                        requestNotSuccessful(response, callId);
-                    }
+                printResponseLogs(response, "facility citizen :onResponse: ", "facility citizen :onResponse: body:", "facility citizen :onResponse:error body:");
+                if (response.code() == 201) {
+                    setChanged();
+                    notifyObservers(new ApiCallReturnObjects(null, "Success", response.body().get("success").getAsString(), false, callId));
+                } else {
+                    setChanged();
+                    requestNotSuccessful(response, callId);
                 }
             }
 
@@ -172,6 +172,53 @@ public class ApiCalls extends Observable {
                 notifyObservers(new ApiCallReturnObjects(null, "Error", t.toString(), false, callId));
             }
         });
+    }
+
+
+    /***
+     * Call ID = 4
+     * @param userName
+     * @param password
+     */
+    public void login(String userName, String password) {
+        final int callId = 4;
+        JsonObject data = new JsonObject();
+        data.addProperty("user_name", userName);
+        data.addProperty("password", password);
+
+        Call<JsonObject> call = ApiCallingObject.getApiCallObject().login(data);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                printResponseLogs(response, "facility citizen :onResponse: ", "facility citizen :onResponse: body:", "facility citizen :onResponse:error body:");
+                if (response.code() == 200) {
+                    setChanged();
+                    JsonObject data = response.body();
+                    notifyObservers(new ApiCallReturnObjects(getLoginResponseData(data), "Success", "Login successful", true, callId));
+                } else {
+                    setChanged();
+                    requestNotSuccessful(response, callId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(TAG, "login :onFailure: " + t.toString());
+                setChanged();
+                notifyObservers(new ApiCallReturnObjects(null, "Error", t.toString(), false, callId));
+            }
+        });
+    }
+
+    private Object getLoginResponseData(JsonObject data) {
+        if (data.get("group").getAsString().contains("citizen")) {
+            return Citizen.fromJson(data);
+        } else {
+            HealthFacility facility = HealthFacility.fromJson(data.get("facility").getAsJsonObject());
+            facility.setToken(data.get("token").getAsString());
+            return facility;
+
+        }
     }
 
     private void requestNotSuccessful(Response<JsonObject> response, int i) {

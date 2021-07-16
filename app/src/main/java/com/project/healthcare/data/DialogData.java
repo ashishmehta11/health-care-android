@@ -1,16 +1,52 @@
 package com.project.healthcare.data;
 
+import android.view.View;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.project.healthcare.BR;
 
 public class DialogData extends BaseObservable {
-    private String titleString, btnText;
+    private String titleString, btnPositiveText, textString, btnNegativeText;
+    private int negativeBtnVisibility = View.GONE;
 
-    public DialogData(String titleString, String btnText) {
+    public DialogData(String titleString, String textString, String btnPositiveText, String btnNegativeText, int vis) {
         setTitleString(titleString);
-        setBtnText(btnText);
+        setBtnPositiveText(btnPositiveText);
+        setBtnNegativeText(btnNegativeText);
+        setTextString(textString);
+        setNegativeBtnVisibility(vis);
+    }
+
+    @Bindable
+    public int getNegativeBtnVisibility() {
+        return negativeBtnVisibility;
+    }
+
+    public void setNegativeBtnVisibility(int negativeBtnVisibility) {
+        this.negativeBtnVisibility = negativeBtnVisibility;
+        notifyPropertyChanged(BR.negativeBtnVisibility);
+    }
+
+    @Bindable
+    public String getBtnNegativeText() {
+        return btnNegativeText;
+    }
+
+    public void setBtnNegativeText(String btnNegativeText) {
+        this.btnNegativeText = btnNegativeText;
+        notifyPropertyChanged(BR.btnNegativeText);
+    }
+
+    @Bindable
+    public String getTextString() {
+        return textString;
+    }
+
+    public void setTextString(String textString) {
+        this.textString = textString;
+        notifyPropertyChanged(BR.textString);
     }
 
     @Bindable
@@ -24,12 +60,12 @@ public class DialogData extends BaseObservable {
     }
 
     @Bindable
-    public String getBtnText() {
-        return btnText;
+    public String getBtnPositiveText() {
+        return btnPositiveText;
     }
 
-    public void setBtnText(String btnText) {
-        this.btnText = btnText;
-        notifyPropertyChanged(BR.btnText);
+    public void setBtnPositiveText(String btnPositiveText) {
+        this.btnPositiveText = btnPositiveText;
+        notifyPropertyChanged(BR.btnPositiveText);
     }
 }

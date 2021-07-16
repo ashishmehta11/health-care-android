@@ -53,7 +53,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
         prepareRecyclerCities(viewModel.getStatesAndCities().get(viewModel.getSelectedCity().getValue()));
         prepareRecyclerFacilityList(viewModel.getCurrentShowingList());
         attachObservers();
-        dialog = Utils.buildProgressDialog(requireContext());
+        dialog = Utils.buildProgressDialog(requireActivity());
         if (!dialog.isShowing())
             dialog.show();
         ApiCalls.getInstance().addObserver(this);

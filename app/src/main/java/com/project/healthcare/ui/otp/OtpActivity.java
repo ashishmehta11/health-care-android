@@ -25,11 +25,15 @@ public class OtpActivity extends AppCompatActivity {
     ActivityOtpBinding binding;
     private CountDownTimer countDownTimer;
     private boolean allowVerify = false;
+    private String phoneNumber;
+    private String otp = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp);
         binding.incOtp.txtError.setText("Invalid OTP.");
+        phoneNumber = getIntent().getStringExtra("phone_number");
         initializeCountDownTimer();
         attachClickListener();
         countDownTimer.start();
@@ -61,6 +65,7 @@ public class OtpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                otp = s.toString();
                 if (!s.toString().isEmpty()) {
                     if (!Pattern.matches("^[0-9]{6}$", s.toString())) {
                         validateOtp(R.drawable.edit_text_bg_error, View.VISIBLE, R.color.light_blue, android.R.color.holo_red_light, false);

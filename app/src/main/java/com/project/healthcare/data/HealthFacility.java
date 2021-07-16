@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 public class HealthFacility {
     private String id = "";
+    private String token = "";
     private String name = "", address = "", state = "Andhra Pradesh", city = "", pinCode = "", password = "", establishmentDate = "", managedByName = "", avgPrice = "", about = "";
     private ManagedBy managedBy;
     private final ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -145,6 +146,59 @@ public class HealthFacility {
         this.about = about;
     }
 
+    public static HealthFacility fromJson(JsonObject data) {
+        HealthFacility hf = new HealthFacility();
+        try {
+            if (data.has("token"))
+                hf.setToken(data.get("token").getAsString());
+            hf.setId(data.get("id").getAsString());
+            hf.setName(data.get("name").getAsString());
+            hf.getEmails().set(0, data.get("user_name").getAsString());
+            try {
+                if (data.has("emails")
+                        && data.get("emails") != null
+                        && data.get("emails").getAsString() != null
+                        && !data.get("emails").getAsString().equalsIgnoreCase("None")
+                        && data.get("emails").getAsString().length() > 0) {
+                    String[] emails = data.get("emails").getAsString().split(";");
+                    for (int i = 1; i < emails.length; i++) {
+                        hf.getEmails().add(emails[i]);
+                    }
+                }
+            } catch (Exception ignore) {
+
+            }
+            String[] phoneNumbers = data.get("contact_numbers").getAsString().split(";");
+            hf.getPhoneNumbers().clear();
+            for (String phone : phoneNumbers) {
+                hf.getPhoneNumbers().add(phone);
+            }
+            hf.setAddress(data.get("address").getAsString());
+            hf.setAbout(data.get("about").getAsString());
+            hf.setCity(data.get("city").getAsString());
+            hf.setState(data.get("state").getAsString());
+            hf.setPinCode(data.get("pin_code").getAsString());
+            hf.setAvgPrice(data.get("avg_fees").getAsString());
+            for (JsonElement s : data.get("affiliations").getAsJsonArray()) {
+                hf.getAffiliations().add(FacilityType.fromString(s.getAsString()));
+            }
+            JsonObject ownership = data.get("ownership").getAsJsonObject();
+            hf.setManagedBy(ManagedBy.fromString(ownership.get("id").getAsString()));
+            hf.setManagedByName(ownership.get("name").getAsString());
+            for (JsonElement s : data.get("speciality").getAsJsonArray()) {
+                hf.getSpecialities().add(SpecialityType.fromString(s.getAsString()));
+            }
+        } catch (Exception e) {
+            Log.d("HealthFacility", "fromJson: exception : " + Arrays.toString(e.getStackTrace()));
+            Log.d("HealthFacility", "fromJson: exception : " + e.toString());
+        }
+        return hf;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
     public static JsonObject toJson(HealthFacility facility) {
         JsonObject json = new JsonObject();
         json.addProperty("user_name", facility.getEmails().get(0));
@@ -190,52 +244,8 @@ public class HealthFacility {
         return json;
     }
 
-    public static HealthFacility fromJson(JsonObject data) {
-        HealthFacility hf = new HealthFacility();
-        try {
-
-            hf.setId(data.get("id").getAsString());
-            hf.setName(data.get("name").getAsString());
-            hf.getEmails().set(0, data.get("user_name").getAsString());
-            try {
-                if (data.has("emails")
-                        && data.get("emails") != null
-                        && data.get("emails").getAsString() != null
-                        && !data.get("emails").getAsString().equalsIgnoreCase("None")
-                        && data.get("emails").getAsString().length() > 0) {
-                    String[] emails = data.get("emails").getAsString().split(";");
-                    for (int i = 1; i < emails.length; i++) {
-                        hf.getEmails().add(emails[i]);
-                    }
-                }
-            } catch (Exception ignore) {
-
-            }
-            String[] phoneNumbers = data.get("contact_numbers").getAsString().split(";");
-            hf.getPhoneNumbers().clear();
-            for (String phone : phoneNumbers) {
-                hf.getPhoneNumbers().add(phone);
-            }
-            hf.setAddress(data.get("address").getAsString());
-            hf.setAbout(data.get("about").getAsString());
-            hf.setCity(data.get("city").getAsString());
-            hf.setState(data.get("state").getAsString());
-            hf.setPinCode(data.get("pin_code").getAsString());
-            hf.setAvgPrice(data.get("avg_fees").getAsString());
-            for (JsonElement s : data.get("affiliations").getAsJsonArray()) {
-                hf.getAffiliations().add(FacilityType.fromString(s.getAsString()));
-            }
-            JsonObject ownership = data.get("ownership").getAsJsonObject();
-            hf.setManagedBy(ManagedBy.fromString(ownership.get("id").getAsString()));
-            hf.setManagedByName(ownership.get("name").getAsString());
-            for (JsonElement s : data.get("speciality").getAsJsonArray()) {
-                hf.getSpecialities().add(SpecialityType.fromString(s.getAsString()));
-            }
-        } catch (Exception e) {
-            Log.d("HealthFacility", "fromJson: exception : " + Arrays.toString(e.getStackTrace()));
-            Log.d("HealthFacility", "fromJson: exception : " + e.toString());
-        }
-        return hf;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public ArrayList<FacilityType> getAffiliations() {

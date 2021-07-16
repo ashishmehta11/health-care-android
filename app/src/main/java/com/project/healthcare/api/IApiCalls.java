@@ -20,4 +20,8 @@ public interface IApiCalls {
     @Headers("Content-Type: application/json")
     @POST("citizen-create")
     Call<JsonObject> registerCitizen(@Body JsonObject body);
+
+    @Headers("Content-Type: application/json")
+    @POST("login")
+    Call<JsonObject> login(@Body JsonObject body);
 }

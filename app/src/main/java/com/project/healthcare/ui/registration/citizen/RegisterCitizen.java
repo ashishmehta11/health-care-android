@@ -46,7 +46,7 @@ public class RegisterCitizen extends Fragment implements Observer {
         viewModel.getBaseData().setFloatingMenuBtnVisibility(View.VISIBLE);
         addTextWatchers();
         binding.cardLogin.setOnClickListener(v -> attemptRegistration());
-        dialog = Utils.buildProgressDialog(requireContext());
+        dialog = Utils.buildProgressDialog(requireActivity());
         ApiCalls.getInstance().addObserver(this);
         return binding.getRoot();
     }
@@ -270,7 +270,6 @@ public class RegisterCitizen extends Fragment implements Observer {
             if (dialog.isShowing())
                 dialog.cancel();
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
-            viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
             switch (objs.getCallId()) {
                 case 3:
                     if (objs.isSuccess()) {
