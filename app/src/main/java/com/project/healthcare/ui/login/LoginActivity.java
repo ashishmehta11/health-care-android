@@ -18,7 +18,6 @@ import com.project.healthcare.api.ApiCalls;
 import com.project.healthcare.data.Citizen;
 import com.project.healthcare.data.DialogData;
 import com.project.healthcare.data.HealthFacility;
-import com.project.healthcare.database.Database;
 import com.project.healthcare.databinding.ActivityLoginBinding;
 import com.project.healthcare.databinding.DialogRegistrationChoiceBinding;
 import com.project.healthcare.ui.MainActivity;
@@ -132,9 +131,25 @@ public class LoginActivity extends AppCompatActivity implements Observer {
         super.onDestroy();
     }
 
-    private void navigateToOtp(String number) {
+    private void navigateToOtp(Object obj) {
         Intent i = new Intent(this, OtpActivity.class);
-        i.putExtra("phone_number", number);
+        if (obj instanceof Citizen) {
+            Citizen c = (Citizen) obj;
+            i.putExtra("phone_number", c.getPhoneNumber());
+            i.putExtra("id", c.getId());
+            i.putExtra("user_group", "citizen");
+            i.putExtra("token", c.getToken());
+            i.putExtra("user_name", c.getUserName());
+            i.putExtra("name", c.getName());
+        } else {
+            HealthFacility c = (HealthFacility) obj;
+            i.putExtra("phone_number", c.getPhoneNumbers().get(0));
+            i.putExtra("id", c.getId());
+            i.putExtra("user_group", "healthcare facility");
+            i.putExtra("token", c.getToken());
+            i.putExtra("user_name", c.getEmails().get(0));
+            i.putExtra("name", c.getName());
+        }
         startActivity(i);
     }
 
@@ -262,14 +277,10 @@ public class LoginActivity extends AppCompatActivity implements Observer {
             switch (objs.getCallId()) {
                 case 4:
                     if (objs.isSuccess()) {
-                        Database db = new Database(getApplicationContext());
-                        db.insertUser(objs.getData());
-                        final String[] number = {"+91"};
-                        if (objs.getData() instanceof Citizen)
-                            number[0] += ((Citizen) objs.getData()).getPhoneNumber();
-                        else
-                            number[0] += ((HealthFacility) objs.getData()).getPhoneNumbers().get(0);
-                        navigateToOtp(number[0]);
+//                        Database db = new Database(getApplicationContext());
+//                        db.insertUser(objs.getData());
+
+                        navigateToOtp(objs.getData());
                     } else {
                         generalDialog.binding.getData().setTitleString(objs.getTitle());
                         generalDialog.binding.getData().setTextString(objs.getText());
