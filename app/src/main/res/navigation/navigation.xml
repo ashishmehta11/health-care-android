@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_homeFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_facilityDetail"
+            app:destination="@id/facilityDetail" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"
@@ -39,5 +42,13 @@
     <fragment
         android:id="@+id/serviceInfo"
         android:name="com.project.healthcare.ui.registration.facility.service_info.ServiceInfo"
-        android:label="ServiceInfo" />
+        android:label="ServiceInfo">
+        <action
+            android:id="@+id/action_serviceInfo_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/facilityDetail"
+        android:name="com.project.healthcare.ui.home.facility_detail.FacilityDetail"
+        android:label="FacilityDetail" />
 </navigation>

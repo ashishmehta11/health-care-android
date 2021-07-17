@@ -1,10 +1,12 @@
 package com.project.healthcare.ui.home.center_fragment;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.healthcare.R;
@@ -44,6 +46,12 @@ public class RecyclerFacilityListAdapter extends RecyclerView.Adapter<RecyclerFa
 //        holder.binding.setData(new FacilityListItem(new String[]{"this.is.an.email@mailman.com"}
 //                , new String[]{"883 332 1223"}
 //                , "Besides famous temple, behind this hall, on this street, this relative area, this absolute area"));
+
+        holder.binding.cardFacilityList.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("facility", list.get(position));
+            Navigation.findNavController(holder.binding.getRoot()).navigate(R.id.facilityDetail, bundle);
+        });
         holder.binding.setData(item);
     }
 

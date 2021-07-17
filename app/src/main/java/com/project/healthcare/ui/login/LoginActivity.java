@@ -135,22 +135,15 @@ public class LoginActivity extends AppCompatActivity implements Observer {
 
     private void navigateToOtp(Object obj) {
         Intent i = new Intent(this, OtpActivity.class);
+
         if (obj instanceof Citizen) {
             Citizen c = (Citizen) obj;
+            i.putExtra("obj", c);
             i.putExtra("phone_number", c.getPhoneNumber());
-            i.putExtra("id", c.getId());
-            i.putExtra("user_group", "citizen");
-            i.putExtra("token", c.getToken());
-            i.putExtra("user_name", c.getUserName());
-            i.putExtra("name", c.getName());
         } else {
             HealthFacility c = (HealthFacility) obj;
+            i.putExtra("obj", c);
             i.putExtra("phone_number", c.getPhoneNumbers().get(0));
-            i.putExtra("id", c.getId());
-            i.putExtra("user_group", "healthcare facility");
-            i.putExtra("token", c.getToken());
-            i.putExtra("user_name", c.getEmails().get(0));
-            i.putExtra("name", c.getName());
         }
         startActivity(i);
     }

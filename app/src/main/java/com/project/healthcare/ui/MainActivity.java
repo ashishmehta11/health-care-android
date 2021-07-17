@@ -183,12 +183,16 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public void onBackPressed() {
         switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
             case R.id.register_citizen:
+            case R.id.facilityDetail:
             case R.id.registerFacilityPrimaryInfo:
                 navController.popBackStack(R.id.homeFragment, false);
                 return;
+
             case R.id.facilityInfo:
                 viewModel.getSelectedBottomNumber().setValue(1);
                 return;
+
+
             case R.id.serviceInfo:
                 viewModel.getSelectedBottomNumber().setValue(2);
                 return;

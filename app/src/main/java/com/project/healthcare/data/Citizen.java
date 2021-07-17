@@ -4,14 +4,15 @@ import androidx.databinding.BaseObservable;
 
 import com.google.gson.JsonObject;
 
-public class Citizen extends BaseObservable {
+import java.io.Serializable;
+
+public class Citizen extends BaseObservable implements Serializable {
     private String userName = "";
     private String name = "";
     private String phoneNumber = "";
     private String password = "";
     private String token = "";
     private String id = "";
-
 
 
     public String getUserName() {

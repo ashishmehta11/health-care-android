@@ -6,10 +6,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class HealthFacility {
+public class HealthFacility implements Serializable {
     private String id = "";
     private String token = "";
     private String name = "", address = "", state = "Andhra Pradesh", city = "", pinCode = "", password = "", establishmentDate = "", managedByName = "", avgPrice = "", about = "";
@@ -179,6 +180,7 @@ public class HealthFacility {
             hf.setState(data.get("state").getAsString());
             hf.setPinCode(data.get("pin_code").getAsString());
             hf.setAvgPrice(data.get("avg_fees").getAsString());
+            hf.setEstablishmentDate(data.get("established_date").getAsString().substring(9));
             for (JsonElement s : data.get("affiliations").getAsJsonArray()) {
                 hf.getAffiliations().add(FacilityType.fromString(s.getAsString()));
             }

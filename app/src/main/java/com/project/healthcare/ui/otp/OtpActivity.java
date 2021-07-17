@@ -20,15 +20,11 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.gson.JsonObject;
 import com.project.healthcare.R;
-import com.project.healthcare.data.Citizen;
 import com.project.healthcare.data.DialogData;
-import com.project.healthcare.data.HealthFacility;
 import com.project.healthcare.database.Database;
 import com.project.healthcare.databinding.ActivityOtpBinding;
 import com.project.healthcare.ui.MainActivity;
@@ -194,7 +190,7 @@ public class OtpActivity extends AppCompatActivity {
                             navigateToMainActivity();
                         });
                         generalDialog.dialog.show();
-                        FirebaseUser user = task.getResult().getUser();
+                        //FirebaseUser user = task.getResult().getUser();
 
                         // Update UI
                     } else {
@@ -212,24 +208,20 @@ public class OtpActivity extends AppCompatActivity {
                 });
     }
 
-    private JsonObject intentToJson() {
-        JsonObject data = new JsonObject();
-        data.addProperty("phone_number", getIntent().getStringExtra("phone_number"));
-        data.addProperty("name", getIntent().getStringExtra("name"));
-        data.addProperty("user_name", getIntent().getStringExtra("user_name"));
-        data.addProperty("token", getIntent().getStringExtra("token"));
-        data.addProperty("token", getIntent().getStringExtra("token"));
-        data.addProperty("id", getIntent().getStringExtra("id"));
-        return data;
-    }
+//    private JsonObject intentToJson() {
+//        JsonObject data = new JsonObject();
+//        data.addProperty("phone_number", getIntent().getStringExtra("phone_number"));
+//        data.addProperty("name", getIntent().getStringExtra("name"));
+//        data.addProperty("user_name", getIntent().getStringExtra("user_name"));
+//        data.addProperty("token", getIntent().getStringExtra("token"));
+//        data.addProperty("token", getIntent().getStringExtra("token"));
+//        data.addProperty("id", getIntent().getStringExtra("id"));
+//        return data;
+//    }
 
     private void insertUserIntoDB() {
         Database db = new Database(getApplicationContext());
-        if (getIntent().getStringExtra("user_group").contains("citizen")) {
-            db.insertUser(Citizen.fromJson(intentToJson()));
-        } else {
-            db.insertUser(HealthFacility.fromJson(intentToJson()));
-        }
+        db.insertUser(getIntent().getSerializableExtra("obj"));
     }
 
     private void attachClickListener() {

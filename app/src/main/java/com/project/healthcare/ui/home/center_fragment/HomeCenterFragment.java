@@ -116,7 +116,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
 
     @Override
     public void onDestroyView() {
-        ApiCalls.getInstance().deleteObserver(this);
+        //ApiCalls.getInstance().deleteObserver(this);
         if (dialog.isShowing())
             dialog.cancel();
         super.onDestroyView();
@@ -126,6 +126,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof RecyclerCitiesAdapter.SelectedCityNotifier) {
             viewModel.setSelectedCity(arg.toString());
+            ApiCalls.getInstance().getFacilitiesByCity(viewModel.getSelectedState().getValue(), viewModel.getSelectedCity().getValue());
         }
         if (o instanceof ApiCalls) {
             if (dialog.isShowing())
