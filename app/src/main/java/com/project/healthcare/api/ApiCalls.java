@@ -221,15 +221,55 @@ public class ApiCalls extends Observable {
         }
     }
 
+
+    /***
+     * Call ID =5
+     * @param token
+     */
+    public void logout(String token) {
+        final int callId = 5;
+        Call<JsonObject> call = ApiCallingObject.getApiCallObject().logout(token);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                printResponseLogs(response, "logout :onResponse: ", "logout :onResponse: body:", "logout :onResponse:error body:");
+                if (response.code() == 200) {
+                    setChanged();
+                    notifyObservers(new ApiCallReturnObjects(null
+                            , "Success", response.body().get("success").getAsString()
+                            , true
+                            , callId));
+                } else {
+                    setChanged();
+                    requestNotSuccessful(response, callId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(TAG, "logout :onFailure: " + t.toString());
+                setChanged();
+                notifyObservers(new ApiCallReturnObjects(null, "Error", t.toString(), false, callId));
+            }
+        });
+    }
+
     private void requestNotSuccessful(Response<JsonObject> response, int i) {
         if (response.errorBody() != null) {
             Converter<ResponseBody, JsonObject> converter = ApiCallingObject.getRetrofit()
                     .responseBodyConverter(JsonObject.class, new Annotation[0]);
             try {
                 JsonObject errorResp = converter.convert(response.errorBody());
-                notifyObservers(new ApiCallReturnObjects(null, "Error",
-                        errorResp.get("error").getAsString()
-                        , false, i));
+                if (errorResp.has("error"))
+                    notifyObservers(new ApiCallReturnObjects(null, "Error",
+                            errorResp.get("error").getAsString()
+                            , false, i));
+                else if (errorResp.has("detail"))
+                    notifyObservers(new ApiCallReturnObjects(null, "Error",
+                            errorResp.get("detail").getAsString()
+                            , false, i));
+                else
+                    notifyObservers(new ApiCallReturnObjects(null, "Error", response.message(), false, i));
             } catch (IOException e) {
                 Log.d(TAG, "requestNotSuccessful: exception trace :" + Arrays.toString(e.getStackTrace()));
                 Log.d(TAG, "requestNotSuccessful: exception :" + e.getMessage());

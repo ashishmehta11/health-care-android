@@ -61,10 +61,10 @@ public class OtpActivity extends AppCompatActivity {
         binding.incOtp.txtError.setText("Invalid OTP.");
         phoneNumber = "+91" + getIntent().getStringExtra("phone_number");
         progressDialog = Utils.buildProgressDialog(this);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(false);
         generalDialog.buildGeneralDialog(this, new DialogData(
-                "",
+                "Error",
                 "",
                 "OK",
                 "",

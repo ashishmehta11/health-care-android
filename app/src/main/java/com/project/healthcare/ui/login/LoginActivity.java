@@ -46,8 +46,10 @@ public class LoginActivity extends AppCompatActivity implements Observer {
                 "", "", "OK", "CANCEL", View.GONE));
         progressDialog = Utils.buildProgressDialog(LoginActivity.this);
         ApiCalls.getInstance().addObserver(this);
+
         attachListeners();
     }
+
 
     private void attachListeners() {
         //LOGIN BTN CLICK LISTENER
@@ -277,9 +279,6 @@ public class LoginActivity extends AppCompatActivity implements Observer {
             switch (objs.getCallId()) {
                 case 4:
                     if (objs.isSuccess()) {
-//                        Database db = new Database(getApplicationContext());
-//                        db.insertUser(objs.getData());
-
                         navigateToOtp(objs.getData());
                     } else {
                         generalDialog.binding.getData().setTitleString(objs.getTitle());

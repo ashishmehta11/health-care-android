@@ -37,7 +37,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         baseData = new BaseData(AppCompatResources.getColorStateList(application.getApplicationContext(), R.color.blue)
                 , AppCompatResources.getColorStateList(application.getApplicationContext(), R.color.transparent_white));
         buildStatesAndCities();
-        selectedState = new MutableLiveData<>("Gujarat");
+        selectedState = new MutableLiveData<>("Andhra Pradesh");
         selectedCity = new MutableLiveData<>(statesAndCities.get(selectedState.getValue()).get(0));
         selectedBottomNumber = new MutableLiveData<>();
     }

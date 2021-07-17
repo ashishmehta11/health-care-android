@@ -1,5 +1,6 @@
 package com.project.healthcare.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,20 +20,32 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.project.healthcare.R;
+import com.project.healthcare.api.ApiCalls;
+import com.project.healthcare.data.Citizen;
+import com.project.healthcare.data.DialogData;
+import com.project.healthcare.data.HealthFacility;
+import com.project.healthcare.database.Database;
 import com.project.healthcare.databinding.ActivityMainBinding;
 import com.project.healthcare.ui.login.LoginActivity;
+import com.project.healthcare.utils.Utils;
 
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Observer {
     private ActivityMainBinding binding;
     private MainActivityViewModel viewModel;
     private static final String TAG = "HomeActivity";
     private NavController navController;
     private final float size = 40;
     private final float smallSize = 24;
+    private final Utils.GeneralDialog generalDialog = new Utils.GeneralDialog();
+    boolean isLoggedIn = false;
+    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +53,15 @@ public class MainActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setData(viewModel.getBaseData());
+        progressDialog = Utils.buildProgressDialog(this);
+        generalDialog.buildGeneralDialog(this, new DialogData("", "", "OK", "", View.GONE));
+        generalDialog.binding.footer.dialogBtnFooterPositive.setOnClickListener(v -> generalDialog.dialog.cancel());
         binding.drawerLayout.setDrawerElevation(0);
         binding.drawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent, getTheme()));
         navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        ApiCalls.getInstance().addObserver(this);
+        setLoggedInUser();
         attachListeners();
         addObservers();
         if (getIntent().hasExtra("citizen")) {
@@ -52,10 +70,24 @@ public class MainActivity extends AppCompatActivity {
         } else if (getIntent().hasExtra("facility")) {
             viewModel.getSelectedBottomNumber().setValue(1);
         }
+    }
 
-        //ApiCalls.getInstance().getFacilitiesByCity();
-        //else
-        // attachFragment(HomeFragment.class);
+    private void setLoggedInUser() {
+        Database db = new Database(getApplicationContext());
+        Object obj = db.getUser();
+        if (obj == null) {
+            isLoggedIn = false;
+            binding.navMenuLogout.cardView.setVisibility(View.GONE);
+            binding.navMenuLogin.cardView.setVisibility(View.VISIBLE);
+        } else {
+            isLoggedIn = true;
+            binding.navMenuLogout.cardView.setVisibility(View.VISIBLE);
+            binding.navMenuLogin.cardView.setVisibility(View.GONE);
+            if (obj instanceof Citizen)
+                viewModel.setCitizen((Citizen) obj);
+            else
+                viewModel.setHealthFacility((HealthFacility) obj);
+        }
     }
 
     private void addObservers() {
@@ -278,14 +310,72 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //COVID
-        binding.navMenuCovid.cardView.setOnClickListener(v -> {
-
+        binding.navMenuLogout.cardView.setOnClickListener(v -> {
             binding.drawerLayout.closeDrawer(GravityCompat.END);
+            Utils.GeneralDialog logoutDialog = new Utils.GeneralDialog();
+            logoutDialog.buildGeneralDialog(this, new DialogData(
+                    "Confirm",
+                    "Are you sure you want to logout?",
+                    "NO",
+                    "YES",
+                    View.VISIBLE
+            ));
+            logoutDialog.binding.footer.dialogBtnFooterPositive.setOnClickListener(v1 -> {
+                logoutDialog.dialog.dismiss();
+            });
+            logoutDialog.binding.footer.dialogBtnFooterNegative.setOnClickListener(v1 -> {
+                String token = "Token ";
+                if (new Database(getApplicationContext()).getUser() instanceof Citizen) {
+                    token += ((Citizen) new Database(getApplicationContext()).getUser()).getToken();
+                } else {
+                    token += ((HealthFacility) new Database(getApplicationContext()).getUser()).getToken();
+                }
+                logoutDialog.dialog.dismiss();
+                progressDialog.show();
+                ApiCalls.getInstance().logout(token);
+            });
+            logoutDialog.dialog.show();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        ApiCalls.getInstance().deleteObserver(this);
+        super.onDestroy();
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof ApiCalls) {
+            if (progressDialog.isShowing())
+                progressDialog.cancel();
+            ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
+            switch (objs.getCallId()) {
+                case 5:
+                    if (objs.isSuccess()) {
+                        new Database(getApplicationContext()).deleteUser();
+                        FirebaseAuth.getInstance().signOut();
+                        setLoggedInUser();
+                        generalDialog.binding.getData().setTitleString(objs.getTitle());
+                        generalDialog.binding.getData().setTextString(objs.getText());
+                        generalDialog.dialog.setOnDismissListener(dialog -> {
+                        });
+                        generalDialog.dialog.show();
+                    } else {
+                        generalDialog.binding.getData().setTitleString(objs.getTitle());
+                        generalDialog.binding.getData().setTextString(objs.getText());
+                        generalDialog.dialog.setOnDismissListener(dialog -> {
+                        });
+                        generalDialog.dialog.show();
+                        //Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getTitle() + " : -> " + objs.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
     }
 }

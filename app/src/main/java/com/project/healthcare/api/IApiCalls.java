@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -24,4 +25,7 @@ public interface IApiCalls {
     @Headers("Content-Type: application/json")
     @POST("login")
     Call<JsonObject> login(@Body JsonObject body);
+
+    @GET("logout")
+    Call<JsonObject> logout(@Header("Authorization") String token);
 }
