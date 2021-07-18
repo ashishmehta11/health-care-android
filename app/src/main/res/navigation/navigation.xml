@@ -15,6 +15,12 @@
         <action
             android:id="@+id/action_homeFragment_to_facilityDetail"
             app:destination="@id/facilityDetail" />
+        <action
+            android:id="@+id/action_homeFragment_to_citizenProfile"
+            app:destination="@id/citizenProfile" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFacilityPrimaryInfo"
+            app:destination="@id/profileFacilityPrimaryInfo" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"
@@ -23,7 +29,11 @@
     <fragment
         android:id="@+id/register_citizen"
         android:name="com.project.healthcare.ui.registration.citizen.RegisterCitizen"
-        android:label="Register" />
+        android:label="Register">
+        <action
+            android:id="@+id/action_register_citizen_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
     <fragment
         android:id="@+id/registerFacilityPrimaryInfo"
         android:name="com.project.healthcare.ui.registration.facility.primary_info.RegisterFacilityPrimaryInfo"
@@ -51,4 +61,32 @@
         android:id="@+id/facilityDetail"
         android:name="com.project.healthcare.ui.home.facility_detail.FacilityDetail"
         android:label="FacilityDetail" />
+    <fragment
+        android:id="@+id/citizenProfile"
+        android:name="com.project.healthcare.ui.profile.citizen.CitizenProfile"
+        android:label="CitizenProfile" />
+    <fragment
+        android:id="@+id/profileFacilityInfo"
+        android:name="com.project.healthcare.ui.profile.facility.facility_info.ProfileFacilityInfo"
+        android:label="ProfileFacilityInfo">
+        <action
+            android:id="@+id/action_profileFacilityInfo_to_profileServiceInfo"
+            app:destination="@id/profileServiceInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFacilityPrimaryInfo"
+        android:name="com.project.healthcare.ui.profile.facility.primary_info.ProfileFacilityPrimaryInfo"
+        android:label="ProfileFacilityPrimaryInfo">
+        <action
+            android:id="@+id/action_profileFacilityPrimaryInfo_to_profileFacilityInfo"
+            app:destination="@id/profileFacilityInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileServiceInfo"
+        android:name="com.project.healthcare.ui.profile.facility.service_info.ProfileServiceInfo"
+        android:label="ProfileServiceInfo">
+        <action
+            android:id="@+id/action_profileServiceInfo_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

@@ -80,7 +80,8 @@ public class Citizen extends BaseObservable implements Serializable {
         JsonObject data = new JsonObject();
         data.addProperty("user_name", getUserName());
         data.addProperty("name", getName());
-        data.addProperty("password", getPassword());
+        if (!this.password.isEmpty())
+            data.addProperty("password", getPassword());
         data.addProperty("phone_number", getPhoneNumber());
         return data;
     }

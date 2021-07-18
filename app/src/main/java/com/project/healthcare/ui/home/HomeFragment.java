@@ -28,6 +28,7 @@ public class HomeFragment extends Fragment {
         }
         viewModel.getBaseData().setTitleBarName("Home");
         viewModel.getBaseData().setFloatingMenuBtnVisibility(View.VISIBLE);
+        viewModel.getSignalToSetLoggedInUser().setValue(viewModel.getSignalToSetLoggedInUser().getValue() + 1);
         return binding.getRoot();
     }
 }

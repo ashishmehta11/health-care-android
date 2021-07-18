@@ -28,6 +28,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.regex.Pattern;
 
+import static com.project.healthcare.api.ApiCalls.CALL_ID_LOGIN;
+
 public class LoginActivity extends AppCompatActivity implements Observer {
     LoginActivityViewModel viewModel;
     ActivityLoginBinding binding;
@@ -270,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements Observer {
                 progressDialog.cancel();
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
             switch (objs.getCallId()) {
-                case 4:
+                case CALL_ID_LOGIN:
                     if (objs.isSuccess()) {
                         navigateToOtp(objs.getData());
                     } else {

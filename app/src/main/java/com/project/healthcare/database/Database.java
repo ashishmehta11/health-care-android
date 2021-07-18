@@ -34,7 +34,7 @@ public class Database extends SQLiteOpenHelper {
                             "name TEXT," +
                             "user_group TEXT," +
                             "user_name TEXT UNIQUE," +
-                            "phone_number TEXT," +
+                            "phone_number TEXT UNIQUE," +
                             "token TEXT UNIQUE)";
 
             db.execSQL(createTableExam);

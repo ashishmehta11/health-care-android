@@ -35,6 +35,8 @@ import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
+import static com.project.healthcare.api.ApiCalls.CALL_ID_FACILITY_BY_ID;
+
 
 public class MainActivity extends AppCompatActivity implements Observer {
     private ActivityMainBinding binding;
@@ -91,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     private void addObservers() {
+        viewModel.getSignalToSetLoggedInUser().observe(this, integer -> {
+            setLoggedInUser();
+        });
         viewModel.getSelectedBottomNumber().observe(this, integer -> {
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.eighty)
                     , getResources().getDimensionPixelSize(R.dimen.eighty));
@@ -103,14 +108,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             Log.d(TAG, "addObservers: case 3 : stages " + viewModel.getHealthFacility().getCompletedStages());
             switch (integer) {
                 case 1:
-                    if (navController.getCurrentDestination().getId() != R.id.recyclerFacilityList) {
-                        navController.navigate(R.id.registerFacilityPrimaryInfo);
-                        navController.popBackStack(R.id.registerFacilityPrimaryInfo, false);
-                        setBottomNavCardsToDefault();
-                    }
                     setValuesInc1(lp, color, size);
-
-
                     if (viewModel.getHealthFacility().getCompletedStages() == 0) {
                         setValuesInc2(lps, colorLight, smallSize);
                         setValuesInc3(lps, colorLight, smallSize);
@@ -118,33 +116,67 @@ public class MainActivity extends AppCompatActivity implements Observer {
                     if (viewModel.getHealthFacility().getCompletedStages() == 1) {
                         setValuesInc3(lps, colorLight, smallSize);
                     }
+                    if (viewModel.getBaseData().getTitleBarName().contains("Facility Profile")) {
 
-
+                        if (navController.getCurrentDestination().getId() != R.id.profileFacilityPrimaryInfo) {
+                            navController.navigate(R.id.profileFacilityPrimaryInfo);
+                            navController.popBackStack(R.id.profileFacilityPrimaryInfo, false);
+                            setBottomNavCardsToDefault();
+                        }
+                        return;
+                    }
+                    if (navController.getCurrentDestination().getId() != R.id.registerFacilityPrimaryInfo) {
+                        navController.navigate(R.id.registerFacilityPrimaryInfo);
+                        navController.popBackStack(R.id.registerFacilityPrimaryInfo, false);
+                        setBottomNavCardsToDefault();
+                    }
                     break;
                 case 2:
-                    if (viewModel.getHealthFacility().getCompletedStages() >= 1) {
-                        if (navController.getCurrentDestination().getId() != R.id.facilityInfo) {
-                            navController.navigate(R.id.facilityInfo);
-                            navController.popBackStack(R.id.facilityInfo, false);
-                        }
 
+                    if (viewModel.getHealthFacility().getCompletedStages() >= 1) {
                         setBottomNavCardsToDefault();
                         setValuesInc2(lp, color, size);
 
                         if (viewModel.getHealthFacility().getCompletedStages() < 2) {
                             setValuesInc3(lps, colorLight, smallSize);
                         }
+                        if (viewModel.getBaseData().getTitleBarName().contains("Facility Profile")) {
+
+                            if (navController.getCurrentDestination().getId() != R.id.profileFacilityInfo) {
+                                navController.navigate(R.id.profileFacilityInfo);
+                                navController.popBackStack(R.id.profileFacilityInfo, false);
+                                setBottomNavCardsToDefault();
+                            }
+                            return;
+
+                        }
+                        if (navController.getCurrentDestination().getId() != R.id.facilityInfo) {
+                            navController.navigate(R.id.facilityInfo);
+                            navController.popBackStack(R.id.facilityInfo, false);
+                        }
+
+
                     }
                     break;
                 case 3:
 
                     if (viewModel.getHealthFacility().getCompletedStages() > 1) {
+                        setBottomNavCardsToDefault();
+                        setValuesInc3(lp, color, size);
+                        if (viewModel.getBaseData().getTitleBarName().contains("Facility Profile")) {
+
+                            if (navController.getCurrentDestination().getId() != R.id.profileServiceInfo) {
+                                navController.navigate(R.id.profileServiceInfo);
+                                navController.popBackStack(R.id.profileServiceInfo, false);
+                                setBottomNavCardsToDefault();
+                            }
+                            return;
+                        }
                         if (navController.getCurrentDestination().getId() != R.id.serviceInfo) {
                             navController.navigate(R.id.serviceInfo);
                             navController.popBackStack(R.id.serviceInfo, false);
                         }
-                        setBottomNavCardsToDefault();
-                        setValuesInc3(lp, color, size);
+
                     }
             }
         });
@@ -184,16 +216,20 @@ public class MainActivity extends AppCompatActivity implements Observer {
         switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
             case R.id.register_citizen:
             case R.id.facilityDetail:
+            case R.id.citizenProfile:
             case R.id.registerFacilityPrimaryInfo:
+            case R.id.profileFacilityPrimaryInfo:
                 navController.popBackStack(R.id.homeFragment, false);
                 return;
 
             case R.id.facilityInfo:
+            case R.id.profileFacilityInfo:
                 viewModel.getSelectedBottomNumber().setValue(1);
                 return;
 
 
             case R.id.serviceInfo:
+            case R.id.profileServiceInfo:
                 viewModel.getSelectedBottomNumber().setValue(2);
                 return;
             case R.id.homeFragment:
@@ -226,7 +262,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 } else {
                     if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.registerFacilityPrimaryInfo ||
                             Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.facilityInfo ||
-                            Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.serviceInfo) {
+                            Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.serviceInfo ||
+                            viewModel.getBaseData().getTitleBarName().contains("Facility Profile")) {
                         binding.cardMenu.setVisibility(View.GONE);
                         binding.includeBottomNav.btnMenu.setVisibility(View.VISIBLE);
                     } else {
@@ -303,8 +340,20 @@ public class MainActivity extends AppCompatActivity implements Observer {
         //PROFILE
 
         binding.navMenuProfile.cardView.setOnClickListener(v -> {
-
             binding.drawerLayout.closeDrawer(GravityCompat.END);
+            Object user = new Database(getApplicationContext()).getUser();
+            if (user != null) {
+                if (user instanceof Citizen) {
+                    viewModel.setCitizen((Citizen) user);
+                    navController.navigate(R.id.citizenProfile);
+                } else {
+                    String id = ((HealthFacility) user).getId();
+                    if (!progressDialog.isShowing())
+                        progressDialog.show();
+                    ApiCalls.getInstance().getFacilityById(id);
+
+                }
+            }
         });
 
         //SEARCH
@@ -360,16 +409,31 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 progressDialog.cancel();
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
             switch (objs.getCallId()) {
-                case 5:
+                case ApiCalls.CALL_ID_LOGOUT:
                     if (objs.isSuccess()) {
                         new Database(getApplicationContext()).deleteUser();
                         FirebaseAuth.getInstance().signOut();
-                        setLoggedInUser();
-                        generalDialog.binding.getData().setTitleString(objs.getTitle());
-                        generalDialog.binding.getData().setTextString(objs.getText());
+
+                        generalDialog.dialog.setOnDismissListener(dialog -> {
+                            Intent i = new Intent(this, MainActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        });
+
+                    } else {
+                        //Toast.makeText(viewModel.getApplication().getApplicationContext(), objs.getTitle() + " : -> " + objs.getText(), Toast.LENGTH_SHORT).show();
                         generalDialog.dialog.setOnDismissListener(dialog -> {
                         });
-                        generalDialog.dialog.show();
+                    }
+                    generalDialog.binding.getData().setTitleString(objs.getTitle());
+                    generalDialog.binding.getData().setTextString(objs.getText());
+                    generalDialog.dialog.show();
+                    break;
+                case CALL_ID_FACILITY_BY_ID:
+                    if (objs.isSuccess()) {
+                        viewModel.setHealthFacility((HealthFacility) objs.getData());
+                        viewModel.getHealthFacility().setCompletedStages(3);
+                        navController.navigate(R.id.profileFacilityPrimaryInfo);
                     } else {
                         generalDialog.binding.getData().setTitleString(objs.getTitle());
                         generalDialog.binding.getData().setTextString(objs.getText());

@@ -12,15 +12,25 @@ import retrofit2.http.Path;
 
 public interface IApiCalls {
     @GET("facility/{state}/{city}")
-    Call<JsonObject> getFacilities(@Path("state") String state, @Path("city") String city);
+    Call<JsonObject> getFacilitiesByCity(@Path("state") String state, @Path("city") String city);
+
+    @GET("facility/{id}")
+    Call<JsonObject> getFacilityById(@Path("id") String id);
 
     @Headers("Content-Type: application/json")
     @POST("facility-create")
     Call<JsonObject> registerFacility(@Body JsonObject body);
 
+
     @Headers("Content-Type: application/json")
     @POST("citizen-create")
     Call<JsonObject> registerCitizen(@Body JsonObject body);
+
+    @POST("citizen-update")
+    Call<JsonObject> updateCitizen(@Header("Authorization") String token, @Body JsonObject body);
+
+    @POST("facility-update")
+    Call<JsonObject> updateFacility(@Header("Authorization") String token, @Body JsonObject body);
 
     @Headers("Content-Type: application/json")
     @POST("login")
@@ -28,4 +38,7 @@ public interface IApiCalls {
 
     @GET("logout")
     Call<JsonObject> logout(@Header("Authorization") String token);
+
+    @GET("delete")
+    Call<JsonObject> delete(@Header("Authorization") String token);
 }

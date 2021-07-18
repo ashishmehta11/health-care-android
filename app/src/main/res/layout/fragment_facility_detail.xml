@@ -81,6 +81,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="16dp"
                             android:text="TextView"
+                            android:textColor="@color/light_yellow"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/txtFacilityName"

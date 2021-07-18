@@ -155,17 +155,19 @@
                         android:visibility="gone" />
 
                     <include
-                        android:id="@+id/navMenuProfile"
-                        layout="@layout/nav_menu_card_profile"
-                        bind:data="@{data}" />
-
-                    <include
                         android:id="@+id/navMenuHome"
                         layout="@layout/nav_menu_card_home"
                         bind:data="@{data}" />
 
                     <include
+                        android:id="@+id/navMenuProfile"
+                        layout="@layout/nav_menu_card_profile"
+                        bind:data="@{data}" />
+
+
+                    <include
                         android:id="@+id/navMenuSearch"
+                        android:visibility="gone"
                         layout="@layout/nav_menu_card_search"
                         bind:data="@{data}" />
 

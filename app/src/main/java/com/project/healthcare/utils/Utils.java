@@ -72,7 +72,7 @@ public class Utils {
             dialog = builder.create();
             dialog.setCanceledOnTouchOutside(true);
             binding.header.btnCloseDialog.setOnClickListener(v -> {
-                if (dialog.isShowing()) dialog.cancel();
+                if (dialog.isShowing()) dialog.dismiss();
             });
         }
     }

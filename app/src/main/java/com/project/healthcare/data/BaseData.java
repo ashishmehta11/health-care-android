@@ -67,6 +67,18 @@ public class BaseData extends BaseObservable {
             setBlue();
             setLogin(transparentWhite);
         }
+
+        if (titleBarName.contains("Facility Profile")) {
+            visibilityMenuBtn = View.GONE;
+            visibilityBottomMenu = View.VISIBLE;
+            setBlue();
+            setProfile(transparentWhite);
+        }
+
+        if (titleBarName.contains("Citizen Profile")) {
+            setBlue();
+            setProfile(transparentWhite);
+        }
         setFloatingMenuBtnVisibility(visibilityMenuBtn);
         setRegisterBottomNavVisibility(visibilityBottomMenu);
     }

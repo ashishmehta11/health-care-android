@@ -1,9 +1,10 @@
-package com.project.healthcare.ui.registration.facility.primary_info;
+package com.project.healthcare.ui.profile.facility.primary_info;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.healthcare.R;
-import com.project.healthcare.databinding.FragmentRegisterFacilityPrimaryInfoBinding;
+import com.project.healthcare.databinding.FragmentProfileFacilityPrimaryInfoBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
 
 import java.util.ArrayList;
@@ -32,11 +33,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 
-public class RegisterFacilityPrimaryInfo extends Fragment {
+public class ProfileFacilityPrimaryInfo extends Fragment {
 
-    FragmentRegisterFacilityPrimaryInfoBinding binding;
-    MainActivityViewModel viewModel;
     private static final String TAG = "PrimaryInfo";
+    FragmentProfileFacilityPrimaryInfoBinding binding;
+    MainActivityViewModel viewModel;
     String emailRegex = "^[a-zA-Z0-9._@\\-]{2,}@[a-zA-Z0-9_]*[.][a-zA-Z]+[a-zA-Z.]*$";
     String nameRegex = "^[a-zA-Z\\s]*$";
     String pinCodeRegex = "^[0-9]{6}$";
@@ -49,10 +50,10 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
         // Inflate the layout for this fragment
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         if (binding == null) {
-            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register_facility_primary_info, container, false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_facility_primary_info, container, false);
         }
 
-        viewModel.getBaseData().setTitleBarName("Primary Info");
+        viewModel.getBaseData().setTitleBarName("Facility Profile");
         prepareStateSpinner();
         prepareCitySpinner();
         setEditTextData();
@@ -73,6 +74,8 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             statePos++;
             if (e.getKey().contains(viewModel.getHealthFacility().getState())) break;
         }
+        Log.d(TAG, "setEditTextData: statePos : " + statePos);
+        Log.d(TAG, "setEditTextData: incomming state : " + viewModel.getHealthFacility().getState());
         if (statePos > -1) {
             binding.spinnerState.setSelection(statePos, true);
             prepareCitySpinner();
@@ -82,9 +85,12 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             if (viewModel.getStatesAndCities().get(viewModel.getHealthFacility().getState()).get(cityPos).contains(viewModel.getHealthFacility().getCity()))
                 break;
         }
-        cityPos--;
-        if (cityPos > -1)
-            binding.spinnerCity.setSelection(cityPos, true);
+        Log.d(TAG, "setEditTextData: cityPos : " + cityPos);
+        Log.d(TAG, "setEditTextData: incomming city : " + viewModel.getHealthFacility().getCity());
+        if (cityPos > -1) {
+            final int finalCityPos = cityPos;
+            binding.spinnerCity.postDelayed(() -> binding.spinnerCity.setSelection(finalCityPos, true), 50);
+        }
         binding.email.editText.setText(viewModel.getHealthFacility().getEmails().get(0));
         for (int i = 1; i < viewModel.getHealthFacility().getEmails().size(); i++) {
             addEmailTextBoxes();
@@ -154,6 +160,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
                 startTime.show();
         });
 
+        binding.incMoveRight.cardMoveRight.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
         binding.incMoveRight.btnMoveRight.setOnClickListener(v -> {
             if (viewModel.getHealthFacility().getCompletedStages() > 0) {
                 if (viewModel.getHealthFacility().getCompletedStages() < 1)
@@ -388,7 +395,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             success = false;
         if (!validatePinCodeRegex(viewModel.getHealthFacility().getPinCode()))
             success = false;
-        if (viewModel.getHealthFacility().getPassword().length() < 6)
+        if (viewModel.getHealthFacility().getPassword().length() > 0 && viewModel.getHealthFacility().getPassword().length() < 6)
             success = false;
         for (int i = 0; i < viewModel.getHealthFacility().getEmails().size(); i++)
             if (!validateEmailRegex(viewModel.getHealthFacility().getEmails().get(i)))
@@ -507,7 +514,7 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
                 return;
             }
         }
-        changePasswordPerValidation(R.drawable.edit_text_bg, View.GONE, requireActivity().getColor(R.color.light_blue));
+        changePasswordPerValidation(R.drawable.edit_text_bg, View.GONE, requireActivity().getColor(R.color.blue));
 
     }
 

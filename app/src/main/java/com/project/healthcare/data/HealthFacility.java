@@ -180,7 +180,7 @@ public class HealthFacility implements Serializable {
             hf.setState(data.get("state").getAsString());
             hf.setPinCode(data.get("pin_code").getAsString());
             hf.setAvgPrice(data.get("avg_fees").getAsString());
-            hf.setEstablishmentDate(data.get("established_date").getAsString().substring(9));
+            hf.setEstablishmentDate(data.get("established_date").getAsString().substring(0, 10));
             for (JsonElement s : data.get("affiliations").getAsJsonArray()) {
                 hf.getAffiliations().add(FacilityType.fromString(s.getAsString()));
             }
@@ -210,7 +210,8 @@ public class HealthFacility implements Serializable {
         json.addProperty("city", facility.getCity());
         json.addProperty("state", facility.getState());
         json.addProperty("pin_code", facility.getPinCode());
-        json.addProperty("password", facility.getPassword());
+        if (!facility.getPassword().isEmpty())
+            json.addProperty("password", facility.getPassword());
         json.addProperty("established_date", facility.getEstablishmentDate());
         String num = "";
         for (int i = 0; i < facility.getPhoneNumbers().size(); i++) {

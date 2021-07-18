@@ -24,6 +24,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final MutableLiveData<String> selectedState;
     private final MutableLiveData<String> selectedCity;
     private final MutableLiveData<Integer> selectedBottomNumber;
+    private final MutableLiveData<Integer> signalToSetLoggedInUser;
     private final Application application;
     private HealthFacility healthFacility = new HealthFacility();
     private Citizen citizen = new Citizen();
@@ -40,6 +41,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         selectedState = new MutableLiveData<>("Andhra Pradesh");
         selectedCity = new MutableLiveData<>(statesAndCities.get(selectedState.getValue()).get(0));
         selectedBottomNumber = new MutableLiveData<>();
+        signalToSetLoggedInUser = new MutableLiveData<>(1);
     }
 
     public Application getApplication() {
@@ -105,6 +107,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void setCitizen(Citizen citizen) {
         this.citizen = citizen;
+    }
+
+    public MutableLiveData<Integer> getSignalToSetLoggedInUser() {
+        return signalToSetLoggedInUser;
     }
 }
 

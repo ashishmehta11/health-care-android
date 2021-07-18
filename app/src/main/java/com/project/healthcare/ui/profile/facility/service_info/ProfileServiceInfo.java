@@ -1,24 +1,26 @@
-package com.project.healthcare.ui.registration.facility.service_info;
+package com.project.healthcare.ui.profile.facility.service_info;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.project.healthcare.R;
 import com.project.healthcare.api.ApiCalls;
 import com.project.healthcare.data.DialogData;
+import com.project.healthcare.data.HealthFacility;
 import com.project.healthcare.data.SpecialityType;
-import com.project.healthcare.databinding.FragmentServiceInfoBinding;
+import com.project.healthcare.database.Database;
+import com.project.healthcare.databinding.FragmentProfileServiceInfoBinding;
 import com.project.healthcare.ui.MainActivityViewModel;
-import com.project.healthcare.ui.login.LoginActivity;
 import com.project.healthcare.utils.Utils;
 
 import java.util.ArrayList;
@@ -26,31 +28,34 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
-import static com.project.healthcare.api.ApiCalls.CALL_ID_REGISTER_FACILITY;
+import static com.project.healthcare.api.ApiCalls.CALL_ID_DELETE_USER;
+import static com.project.healthcare.api.ApiCalls.CALL_ID_UPDATE_FACILITY;
 
 
-public class ServiceInfo extends Fragment implements Observer {
+public class ProfileServiceInfo extends Fragment implements Observer {
+    private static final String TAG = "ProfileServiceInfo";
     private final RecyclerSelectedSpecialityTypeAdapter.SpecialityRemovedNotifier specialityRemovedNotifier = new RecyclerSelectedSpecialityTypeAdapter.SpecialityRemovedNotifier();
     private final RecyclerTypeOfSpecialityAdapter.SpecialityAddedNotifier specialityAddedNotifier = new RecyclerTypeOfSpecialityAdapter.SpecialityAddedNotifier();
-    FragmentServiceInfoBinding binding;
+    FragmentProfileServiceInfoBinding binding;
     MainActivityViewModel viewModel;
     RecyclerTypeOfSpecialityAdapter typeOfSpecialityAdapter;
     RecyclerSelectedSpecialityTypeAdapter selectedSpecialityTypeAdapter;
     ArrayList<SpecialityType> facType = new ArrayList<>(Arrays.asList(SpecialityType.values()));
     Dialog dialog;
     Utils.GeneralDialog generalDialog = new Utils.GeneralDialog();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         if (binding == null) {
-            binding = FragmentServiceInfoBinding.inflate(inflater, container, false);
+            binding = FragmentProfileServiceInfoBinding.inflate(inflater, container, false);
         }
         dialog = Utils.buildProgressDialog(requireActivity());
         generalDialog.buildGeneralDialog(requireActivity(), new DialogData("", "", "OK", "", View.GONE));
         generalDialog.binding.footer.dialogBtnFooterPositive.setOnClickListener(v -> generalDialog.dialog.dismiss());
-        viewModel.getBaseData().setTitleBarName("Provided Services");
+        viewModel.getBaseData().setTitleBarName("Facility Profile");
         specialityRemovedNotifier.addObserver(this);
         specialityAddedNotifier.addObserver(this);
         ApiCalls.getInstance().addObserver(this);
@@ -98,10 +103,10 @@ public class ServiceInfo extends Fragment implements Observer {
         if (success) {
             if (viewModel.getHealthFacility().getCompletedStages() < 3)
                 viewModel.getHealthFacility().setCompletedStages(3);
-            binding.cardRegister.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
+            binding.cardUpdate.setCardBackgroundColor(requireActivity().getColor(R.color.blue));
         } else {
             viewModel.getHealthFacility().setCompletedStages(2);
-            binding.cardRegister.setCardBackgroundColor(requireActivity().getColor(R.color.light_blue));
+            binding.cardUpdate.setCardBackgroundColor(requireActivity().getColor(R.color.light_blue));
         }
         return success;
     }
@@ -121,20 +126,40 @@ public class ServiceInfo extends Fragment implements Observer {
         binding.incMoveLeft.btnMoveLeft.setOnClickListener(v -> {
             viewModel.getSelectedBottomNumber().setValue(2);
         });
-
-        binding.cardRegister.setOnClickListener(v -> {
-            if (validateAll()) {
-                // call api
-//                Toast.makeText(requireContext(), "You have been registered successfully!", Toast.LENGTH_SHORT).show();
-//                Intent i = new Intent(requireActivity(), LoginActivity.class);
-//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(i);
-                ApiCalls.getInstance().registerFacility(viewModel.getHealthFacility());
-                if (!dialog.isShowing())
-                    dialog.show();
-            }
+        binding.cardDelete.setOnClickListener(v -> attemptDelete());
+        binding.cardUpdate.setOnClickListener(v -> {
+            attemptUpdate();
         });
     }
+
+    private void attemptUpdate() {
+        if (validateAll()) {
+            Log.d(TAG, "attemptUpdate: token : " + viewModel.getCitizen().getToken());
+            String token = "Token ";
+            token += ((HealthFacility) new Database(requireContext()).getUser()).getToken();
+            ApiCalls.getInstance().updateFacility(token, viewModel.getHealthFacility());
+            if (!dialog.isShowing())
+                dialog.show();
+        }
+    }
+
+    private void attemptDelete() {
+        Utils.GeneralDialog gd = new Utils.GeneralDialog();
+        gd.buildGeneralDialog(requireActivity(), new DialogData("Confirm", "Are you sure you want to delete your account?", "NO", "YES", View.VISIBLE));
+        gd.binding.footer.dialogBtnFooterPositive.setOnClickListener(v -> {
+            gd.dialog.dismiss();
+        });
+        gd.binding.footer.dialogBtnFooterNegative.setOnClickListener(v -> {
+            String token = "Token ";
+            token += ((HealthFacility) new Database(requireContext()).getUser()).getToken();
+            ApiCalls.getInstance().deleteUser(token);
+            if (!dialog.isShowing())
+                dialog.show();
+        });
+        gd.dialog.show();
+
+    }
+
 
     private void attachAdapters() {
         ArrayList<SpecialityType> type = new ArrayList<>();
@@ -183,20 +208,42 @@ public class ServiceInfo extends Fragment implements Observer {
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
             viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
             switch (objs.getCallId()) {
-                case CALL_ID_REGISTER_FACILITY:
+                case CALL_ID_UPDATE_FACILITY:
                     if (objs.isSuccess()) {
-                        Intent i = new Intent(requireActivity(), LoginActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
+                        Database db = new Database(viewModel.getApplication().getApplicationContext());
+                        viewModel.getHealthFacility().setToken(((HealthFacility) db.getUser()).getToken());
+                        db.deleteUser();
+                        db.insertUser(viewModel.getHealthFacility());
+                    } else {
+
                     }
                     generalDialog.binding.getData().setTitleString(objs.getTitle());
                     generalDialog.binding.getData().setTextString(objs.getText());
                     generalDialog.dialog.setOnDismissListener(dialog -> {
+                        dialog.dismiss();
                     });
+                    generalDialog.dialog.show();
+                    break;
+                case CALL_ID_DELETE_USER:
+                    if (objs.isSuccess()) {
+                        //navigateToLogin();
+                        Database db = new Database(requireContext());
+                        db.deleteUser();
+                        navigateToHome();
+                    } else {
+
+                    }
+                    generalDialog.binding.getData().setTitleString(objs.getTitle());
+                    generalDialog.binding.getData().setTextString(objs.getText());
+//                    generalDialog.dialog.setOnDismissListener(dialog -> {});
                     generalDialog.dialog.show();
                     break;
             }
         }
 
+    }
+
+    private void navigateToHome() {
+        Navigation.findNavController(binding.getRoot()).popBackStack(R.id.homeFragment, false);
     }
 }

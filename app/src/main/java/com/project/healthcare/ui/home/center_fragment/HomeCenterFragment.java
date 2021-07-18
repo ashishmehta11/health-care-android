@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import static com.project.healthcare.api.ApiCalls.CALL_ID_FACILITY_BY_CITY;
+
 
 public class HomeCenterFragment extends Fragment implements Observer {
     FragmentHomeCenterBinding binding;
@@ -134,7 +136,7 @@ public class HomeCenterFragment extends Fragment implements Observer {
             ApiCalls.ApiCallReturnObjects objs = (ApiCalls.ApiCallReturnObjects) arg;
             viewModel.getBaseData().setHomeProgressWheelVisibility(View.GONE);
             switch (objs.getCallId()) {
-                case 1:
+                case CALL_ID_FACILITY_BY_CITY:
                     if (objs.isSuccess()) {
                         ArrayList<HealthFacility> healthFacilities = (ArrayList<HealthFacility>) objs.getData();
                         viewModel.setCurrentShowingList(healthFacilities);
