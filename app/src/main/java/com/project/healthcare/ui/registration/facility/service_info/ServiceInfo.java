@@ -185,9 +185,12 @@ public class ServiceInfo extends Fragment implements Observer {
             switch (objs.getCallId()) {
                 case CALL_ID_REGISTER_FACILITY:
                     if (objs.isSuccess()) {
-                        Intent i = new Intent(requireActivity(), LoginActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
+
+                        generalDialog.dialog.setOnDismissListener(dialog -> {
+                            Intent i = new Intent(requireActivity(), LoginActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        });
                     }
                     generalDialog.binding.getData().setTitleString(objs.getTitle());
                     generalDialog.binding.getData().setTextString(objs.getText());

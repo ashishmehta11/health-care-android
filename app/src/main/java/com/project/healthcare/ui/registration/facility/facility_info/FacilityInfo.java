@@ -66,8 +66,9 @@ public class FacilityInfo extends Fragment implements Observer {
             if (viewModel.getHealthFacility().getManagedBy() == ManagedBy.values()[pos])
                 break;
         }
-        pos--;
-        binding.spinnerManagedBy.setSelection(pos, true);
+        final int fPos =pos;
+        binding.spinnerManagedBy.postDelayed(()->binding.spinnerManagedBy.setSelection(fPos, true),50);
+
         setManagedByLbl();
     }
 

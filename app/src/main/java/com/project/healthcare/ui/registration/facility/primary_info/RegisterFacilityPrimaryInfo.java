@@ -82,9 +82,9 @@ public class RegisterFacilityPrimaryInfo extends Fragment {
             if (viewModel.getStatesAndCities().get(viewModel.getHealthFacility().getState()).get(cityPos).contains(viewModel.getHealthFacility().getCity()))
                 break;
         }
-        cityPos--;
-        if (cityPos > -1)
-            binding.spinnerCity.setSelection(cityPos, true);
+        final int fCity = cityPos;
+        if (cityPos > 0)
+            binding.spinnerCity.postDelayed(() -> binding.spinnerCity.setSelection(fCity, true), 50);
         binding.email.editText.setText(viewModel.getHealthFacility().getEmails().get(0));
         for (int i = 1; i < viewModel.getHealthFacility().getEmails().size(); i++) {
             addEmailTextBoxes();

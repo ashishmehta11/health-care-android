@@ -120,7 +120,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Type of Facilities"
+                    android:text="Type of Specialities and Services"
                     android:textColor="@color/dark_grey"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView9"

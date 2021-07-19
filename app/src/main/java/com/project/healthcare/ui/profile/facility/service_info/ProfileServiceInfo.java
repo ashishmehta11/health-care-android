@@ -53,7 +53,7 @@ public class ProfileServiceInfo extends Fragment implements Observer {
             binding = FragmentProfileServiceInfoBinding.inflate(inflater, container, false);
         }
         dialog = Utils.buildProgressDialog(requireActivity());
-        generalDialog.buildGeneralDialog(requireActivity(), new DialogData("", "", "OK", "", View.GONE));
+        generalDialog.buildGeneralDialog(viewModel.getApplication().getApplicationContext(), new DialogData("", "", "OK", "", View.GONE));
         generalDialog.binding.footer.dialogBtnFooterPositive.setOnClickListener(v -> generalDialog.dialog.dismiss());
         viewModel.getBaseData().setTitleBarName("Facility Profile");
         specialityRemovedNotifier.addObserver(this);
@@ -227,7 +227,7 @@ public class ProfileServiceInfo extends Fragment implements Observer {
                 case CALL_ID_DELETE_USER:
                     if (objs.isSuccess()) {
                         //navigateToLogin();
-                        Database db = new Database(requireContext());
+                        Database db = new Database(viewModel.getApplication().getApplicationContext());
                         db.deleteUser();
                         navigateToHome();
                     } else {
